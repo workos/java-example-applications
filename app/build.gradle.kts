@@ -14,6 +14,7 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -22,6 +23,10 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:30.1.1-jre")
+
+    implementation("io.javalin:javalin:4.1.1")
+
+    implementation("com.workos:workos:0.0.1")
 }
 
 application {
