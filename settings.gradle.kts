@@ -7,5 +7,10 @@
  * in the user manual at https://docs.gradle.org/7.2/userguide/multi_project_builds.html
  */
 
-rootProject.name = "workos-java-example"
-include("app")
+rootProject.name = "java-example-applications"
+include(
+  "java-admin-portal-example",
+  "java-directory-sync-example",
+  "java-magic-link-example",
+  "java-sso-example"
+)
