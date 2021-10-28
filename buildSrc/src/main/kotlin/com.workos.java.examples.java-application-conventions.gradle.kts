@@ -3,3 +3,7 @@ plugins {
 
   application
 }
+
+dependencies {
+  implementation("io.javalin:javalin:4.1.1")
+}
