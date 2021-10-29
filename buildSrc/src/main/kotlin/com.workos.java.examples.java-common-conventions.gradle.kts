@@ -4,6 +4,9 @@ plugins {
 
 repositories {
   mavenCentral()
+
+  // Note: this will be removed once WorkOS SDK has been published to Maven central
+  mavenLocal()
 }
 
 dependencies {
