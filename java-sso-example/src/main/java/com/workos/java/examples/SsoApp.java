@@ -5,6 +5,7 @@ import com.workos.sso.models.ProfileAndToken;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import java.util.Map;
+import java.util.Collections;
 
 public class SsoApp {
   private Javalin app;
@@ -17,13 +18,13 @@ public class SsoApp {
     Map<String, String> env = System.getenv();
 
     app = Javalin.create().start(7000);
-
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
     clientId = env.get("WORKOS_CLIENT_ID");
 
-    app.get("/login", ctx -> this.login(ctx));
-    app.get("/callback", ctx -> this.callback(ctx));
+    app.get("/", ctx -> ctx.render("home.jte"));
+    app.get("/login", this::login);
+    app.get("/callback", this::callback);
   }
 
   public void login(Context ctx) {
@@ -40,9 +41,9 @@ public class SsoApp {
   public Context callback(Context ctx) {
     String code = ctx.queryParam("code");
 
-    ProfileAndToken profile = workos.sso.getProfileAndToken(code, clientId);
+    ProfileAndToken profileAndToken = workos.sso.getProfileAndToken(code, clientId);
 
-    return ctx.result(profile.toString());
+    return ctx.render("profile.jte", Collections.singletonMap("profile", profileAndToken.getProfile()));
   }
 
   public static void main(String[] args) {

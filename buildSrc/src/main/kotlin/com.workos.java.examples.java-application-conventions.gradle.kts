@@ -7,5 +7,7 @@ plugins {
 dependencies {
   implementation("io.javalin:javalin:4.1.1")
 
+  implementation("gg.jte:jte:1.12.0")
+
   implementation("com.workos:workos:0.0.1")
 }
