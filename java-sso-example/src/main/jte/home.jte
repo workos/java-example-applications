@@ -3,5 +3,5 @@
 <div class="container" style="padding: 40px;">
   <h1>Java SSO Example</h1>
 
-  <a href="/login">Login</a>
+  <a class="btn btn-primary" href="/login">Login</a>
 </div>

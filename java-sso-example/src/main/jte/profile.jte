@@ -11,12 +11,14 @@
       <th>Last Name</th>
       <th>Email</th>
       <th>ID</th>
+      <th>Connection Type</th>
     </tr>
     <tr>
       <td>${profile.getFirstName()}</td>
       <td>${profile.getLastName()}</td>
       <td>${profile.getEmail()}</td>
       <td>${profile.getId()}</td>
+      <td>${profile.getConnectionType()}</td>
     </tr>
   </table>
 </div>
