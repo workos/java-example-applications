@@ -1,10 +1,9 @@
 package com.workos.java.examples;
 
-import io.javalin.Javalin;
-import io.javalin.http.Context;
 import com.workos.WorkOS;
 import com.workos.sso.models.ProfileAndToken;
-
+import io.javalin.Javalin;
+import io.javalin.http.Context;
 import java.util.Map;
 
 public class SsoApp {
@@ -23,17 +22,17 @@ public class SsoApp {
 
     clientId = env.get("WORKOS_CLIENT_ID");
 
-    System.out.println("Java SSO Example Application running: http://localhost:7000");
-
     app.get("/login", ctx -> this.login(ctx));
     app.get("/callback", ctx -> this.callback(ctx));
   }
 
   public void login(Context ctx) {
-    String url = workos.getSso()
-      .getAuthorizationUrl(clientId, "http://localhost:7000/callback")
-      .domain("gmail.com")
-      .build();
+    String url =
+        workos
+            .sso
+            .getAuthorizationUrl(clientId, "http://localhost:7000/callback")
+            .domain("gmail.com")
+            .build();
 
     ctx.redirect(url);
   }
@@ -41,7 +40,7 @@ public class SsoApp {
   public Context callback(Context ctx) {
     String code = ctx.queryParam("code");
 
-    ProfileAndToken profile = workos.getSso().getProfileAndToken(code, clientId);
+    ProfileAndToken profile = workos.sso.getProfileAndToken(code, clientId);
 
     return ctx.result(profile.toString());
   }
