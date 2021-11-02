@@ -43,7 +43,7 @@ public class SsoApp {
 
     ProfileAndToken profileAndToken = workos.sso.getProfileAndToken(code, clientId);
 
-    return ctx.render("profile.jte", Collections.singletonMap("profile", profileAndToken.getProfile()));
+    return ctx.render("profile.jte", Collections.singletonMap("profile", profileAndToken.profile));
   }
 
   public static void main(String[] args) {
