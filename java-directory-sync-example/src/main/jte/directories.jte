@@ -20,7 +20,7 @@
 </script>
 
 <div class="container" style="padding: 40px;">
-  <h1>Java Directory Sync Example</h1>
+  <h1>Directories</h1>
 
   @if(deleteResult != null && deleteResult.equals("succeeded"))
     <div class="alert alert-success" role="alert">

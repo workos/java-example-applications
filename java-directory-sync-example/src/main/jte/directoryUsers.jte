@@ -12,7 +12,9 @@
 </style>
 
 <div class="container" style="padding: 40px;">
-  <h1>Java Directory Sync Example</h1>
+  <h1>Directory Users</h1>
+
+  <a class="btn btn-link" href="/directories">Back to Directories</a>
 
   <table class="table">
     <tr>
@@ -25,7 +27,7 @@
     </tr>
     @for(var directoryUser : directoryUsers.data)
       <tr>
-        <td>${directoryUser.id}</td>
+        <td><a href="/directories/${directoryId}/users/${directoryUser.id}">${directoryUser.id}</a></td>
         <td>${directoryUser.directoryId}</td>
         <td>${directoryUser.firstName}</td>
         <td>${directoryUser.lastName}</td>
