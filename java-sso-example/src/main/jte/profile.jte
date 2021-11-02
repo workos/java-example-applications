@@ -14,11 +14,11 @@
       <th>Connection Type</th>
     </tr>
     <tr>
-      <td>${profile.getFirstName()}</td>
-      <td>${profile.getLastName()}</td>
-      <td>${profile.getEmail()}</td>
-      <td>${profile.getId()}</td>
-      <td>${profile.getConnectionType()}</td>
+      <td>${profile.firstName}</td>
+      <td>${profile.lastName}</td>
+      <td>${profile.email}</td>
+      <td>${profile.id}</td>
+      <td>${profile.connectionType}</td>
     </tr>
   </table>
 </div>

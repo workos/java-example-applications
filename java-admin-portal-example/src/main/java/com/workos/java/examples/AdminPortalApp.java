@@ -35,7 +35,7 @@ public class AdminPortalApp {
         .build()
     );
 
-    ctx.redirect(url.getLink());
+    ctx.redirect(url.link);
   }
 
   public void dsyncPortal(Context ctx) {
@@ -47,7 +47,7 @@ public class AdminPortalApp {
         .build()
     );
 
-    ctx.redirect(url.getLink());
+    ctx.redirect(url.link);
   }
 
   public static void main(String[] args) {
