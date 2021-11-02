@@ -3,20 +3,5 @@
 <div class="container" style="padding: 40px;">
   <h1>Java Directory Sync Example</h1>
 
-  <table class="table">
-    <tr>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Email</th>
-      <th>ID</th>
-      <th>Connection Type</th>
-    </tr>
-    <tr>
-      <td>${profile.getFirstName()}</td>
-      <td>${profile.getLastName()}</td>
-      <td>${profile.getEmail()}</td>
-      <td>${profile.getId()}</td>
-      <td>${profile.getConnectionType()}</td>
-    </tr>
-  </table>
+  <a class="btn btn-primary" href="/directories">View Directories</a>
 </div>
