@@ -17,7 +17,7 @@ public class SsoApp {
   public SsoApp() {
     Map<String, String> env = System.getenv();
 
-    app = Javalin.create().start(7000);
+    app = Javalin.create().start(7006);
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
     clientId = env.get("WORKOS_CLIENT_ID");
@@ -31,7 +31,7 @@ public class SsoApp {
     String url =
         workos
             .sso
-            .getAuthorizationUrl(clientId, "http://localhost:7000/callback")
+            .getAuthorizationUrl(clientId, "http://localhost:7006/callback")
             .domain("gmail.com")
             .build();
 

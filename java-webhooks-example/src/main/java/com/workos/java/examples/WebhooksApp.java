@@ -51,7 +51,8 @@ public class WebhooksApp {
       Webhook wh = workos.webhooks.constructEvent(
         payload,
         ctx.header("WorkOS-Signature"),
-        webhookSecret
+        webhookSecret,
+        360
       );
       String webhookJson =  mapper
         .writerWithDefaultPrettyPrinter()
