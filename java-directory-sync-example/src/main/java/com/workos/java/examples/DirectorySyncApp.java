@@ -12,9 +12,9 @@ import com.workos.directorysync.models.DirectoryList;
 import com.workos.directorysync.models.DirectoryUserList;
 import com.workos.directorysync.models.Group;
 import com.workos.directorysync.models.User;
+import com.workos.webhooks.models.Webhook;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
