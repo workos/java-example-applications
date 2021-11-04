@@ -31,7 +31,7 @@ public class OrganizationsApp {
     app.get("/", ctx -> ctx.render("home.jte"));
     app.get("/organizations", this::organizations);
     app.get("/organizations/{organizationId}", this::organization);
-    app.delete("/organizations/delete/{organizationId}", this::deleteOrganization);
+    app.get("/organizations/delete/{organizationId}", this::deleteOrganization);
     app.post("/organizations/create", this::createOrganization);
   }
 
@@ -39,6 +39,8 @@ public class OrganizationsApp {
     String after = ctx.queryParam("after");
     String before = ctx.queryParam("before");
     String deleteResult = ctx.queryParam("deleteResult");
+    String createSucceeded = ctx.queryParam("createSucceeded");
+    String createFailed = ctx.queryParam("createFailed");
 
     ListOrganizationsOptions.Builder options = ListOrganizationsOptions.builder();
 
@@ -55,6 +57,8 @@ public class OrganizationsApp {
     HashMap jteParams = new HashMap();
     jteParams.put("organizations", organizationList);
     jteParams.put("deleteResult", deleteResult);
+    jteParams.put("createFailed", createFailed);
+    jteParams.put("createSucceeded", createSucceeded);
 
     return ctx.render("organizations.jte", jteParams);
   }
@@ -98,9 +102,11 @@ public class OrganizationsApp {
 
       Organization organization = workos.organizations.createOrganization(options);
       System.out.println("organization created: " + organization);
-      ctx.redirect("/organizations");
+      ctx.redirect("/organizations?createSucceeded=" + organization.name);
     } catch (Exception e) {
+      e.printStackTrace();
       System.err.println("Error creating organization: " + e.getMessage());
+      ctx.redirect("/organizations?createFailed=" + e.getMessage());
     }
   }
 

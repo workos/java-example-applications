@@ -1,5 +1,7 @@
 @param com.workos.organizations.models.OrganizationList organizations
 @param String deleteResult
+@param String createSucceeded
+@param String createFailed
 
 !{var before = organizations.listMetadata.before;}
 !{var after = organizations.listMetadata.after;}
@@ -31,6 +33,18 @@
   @if(deleteResult != null && deleteResult.equals("failed"))
     <div class="alert alert-danger" role="alert">
       Delete organization failed.
+    </div>
+  @endif
+
+  @if(createSucceeded != null)
+    <div class="alert alert-success" role="alert">
+      Create organization ${createSucceeded} succeeded.
+    </div>
+  @endif
+
+  @if(createFailed != null)
+    <div class="alert alert-danger" role="alert">
+      Create organization failed: ${createFailed}.
     </div>
   @endif
 

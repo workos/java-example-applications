@@ -6,7 +6,7 @@
 <div class="container" style="padding: 40px;">
   <h1>Organization</h1>
 
-  <a class="btn btn-link" href="/directories">Back to Directories</a>
+  <a class="btn btn-link" href="/organizations">Back to Organizations</a>
 
   @if(hasError == true)
     <div class="alert alert-danger" >Error occurred fetching organization</div>
