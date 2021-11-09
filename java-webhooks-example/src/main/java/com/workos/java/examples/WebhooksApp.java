@@ -13,27 +13,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class WebhooksApp {
   private static Integer wsSessionId = 1;
-  private static Map<WsContext, Integer> webSocketSessions = new ConcurrentHashMap<>();
+  private static final Map<WsContext, Integer> webSocketSessions = new ConcurrentHashMap<>();
 
-  private Javalin app;
+  private final WorkOS workos;
 
-  private WorkOS workos;
+  private final ObjectMapper mapper = new ObjectMapper();
 
-  private ObjectMapper mapper = new ObjectMapper();
-
-  private String webhookSecret;
+  private final String webhookSecret;
 
   public WebhooksApp() {
     Map<String, String> env = System.getenv();
 
-    app = Javalin.create()
+    Javalin app = Javalin.create()
       .ws("/webhooks-ws", ws -> {
-        ws.onConnect(ctx -> {
-          webSocketSessions.put(ctx, wsSessionId += 1);
-        });
-        ws.onClose(ctx -> {
-          webSocketSessions.remove(ctx);
-        });
+        ws.onConnect(ctx -> webSocketSessions.put(ctx, wsSessionId += 1));
+        ws.onClose(webSocketSessions::remove);
       })
       .start(7005);
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
@@ -43,14 +37,18 @@ public class WebhooksApp {
     app.post("/webhooks", this::webhooks);
   }
 
-  public Context webhooks(Context ctx) {
+  public void webhooks(Context ctx) {
     String payload = ctx.body();
     System.out.println(ctx.body());
     System.out.println(ctx.req.getHeaderNames());
     try {
+      String signatureHeader = ctx.header("WorkOS-Signature");
+      if (signatureHeader == null) {
+        signatureHeader = "";
+      }
       Webhook wh = workos.webhooks.constructEvent(
         payload,
-        ctx.header("WorkOS-Signature"),
+        signatureHeader,
         webhookSecret,
         360
       );
@@ -61,19 +59,19 @@ public class WebhooksApp {
       this.broadcastWebhookReceived(webhookJson);
     } catch (SignatureException e) {
       System.err.println("Webhook error: " + e.getMessage());
-      return ctx.status(400);
+      ctx.status(400);
+      return;
     } catch (JsonProcessingException e) {
       System.err.println("Error parsing webhook json");
-      return ctx.status(422);
+      ctx.status(422);
+      return;
     }
-    return ctx.status(200);
+    ctx.status(200);
   }
 
   public void broadcastWebhookReceived(String webhookJson) {
     webSocketSessions.keySet().stream().filter(ctx -> ctx.session.isOpen())
-      .forEach(session -> {
-        session.send(webhookJson);
-      });
+      .forEach(session -> session.send(webhookJson));
   }
 
   public static void main(String[] args) {

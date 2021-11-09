@@ -8,16 +8,14 @@ import java.util.Map;
 import java.util.Collections;
 
 public class SsoApp {
-  private Javalin app;
+  private final WorkOS workos;
 
-  private WorkOS workos;
-
-  private String clientId;
+  private final String clientId;
 
   public SsoApp() {
     Map<String, String> env = System.getenv();
 
-    app = Javalin.create().start(7006);
+    Javalin app = Javalin.create().start(7006);
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
     clientId = env.get("WORKOS_CLIENT_ID");
@@ -38,12 +36,13 @@ public class SsoApp {
     ctx.redirect(url);
   }
 
-  public Context callback(Context ctx) {
+  public void callback(Context ctx) {
     String code = ctx.queryParam("code");
 
+    assert code != null;
     ProfileAndToken profileAndToken = workos.sso.getProfileAndToken(code, clientId);
 
-    return ctx.render("profile.jte", Collections.singletonMap("profile", profileAndToken.profile));
+    ctx.render("profile.jte", Collections.singletonMap("profile", profileAndToken.profile));
   }
 
   public static void main(String[] args) {
