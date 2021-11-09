@@ -1,15 +1,13 @@
 package com.workos.java.examples;
 
 import com.workos.WorkOS;
-import com.workos.common.exceptions.UnprocessableEntityException;
-import com.workos.common.http.UnprocessableEntityExceptionResponse.EntityError;
 import com.workos.passwordless.PasswordlessApi.CreateSessionOptions;
 import com.workos.passwordless.models.PasswordlessSession;
 import com.workos.sso.models.ProfileAndToken;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MagicLinkApp {
@@ -18,7 +16,7 @@ public class MagicLinkApp {
 
   private final String redirectUrl = "/callback";
 
-  private String clientId;
+  private final String clientId;
 
   public MagicLinkApp() {
     Map<String, String> env = System.getenv();
@@ -40,9 +38,11 @@ public class MagicLinkApp {
     try {
       String email = ctx.formParam("email");
 
+      assert email != null;
       CreateSessionOptions options = CreateSessionOptions.builder()
         .email(email)
         .redirectUri("http://localhost:7004" + redirectUrl)
+        .state("myCustomApplicationState")
         .build();
 
       PasswordlessSession session = workos.passwordless.createSession(options);
@@ -58,12 +58,23 @@ public class MagicLinkApp {
     }
   }
 
-  private Context callback(Context ctx) {
+  private void callback(Context ctx) {
     String code = ctx.queryParam("code");
+    String errorMessage = ctx.queryParam("error_description");
+    String state = ctx.queryParam("state");
 
-    ProfileAndToken profileAndToken = workos.sso.getProfileAndToken(code, clientId);
+    if (code == null || code.isBlank()) {
+      ctx.render("error.jte", Collections.singletonMap("errorMessage", errorMessage));
+    } else {
+      ProfileAndToken profileAndToken = workos.sso.getProfileAndToken(code, clientId);
+      Map<String, Object> jteParams = new HashMap<>();
+      jteParams.put("profile", profileAndToken.profile);
+      if (state != null) {
+        jteParams.put("state", state);
+      }
 
-    return ctx.render("profile.jte", Collections.singletonMap("profile", profileAndToken.profile));
+      ctx.render("profile.jte", jteParams);
+    }
   }
 
 

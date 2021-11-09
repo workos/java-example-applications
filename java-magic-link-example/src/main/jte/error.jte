@@ -5,5 +5,7 @@
 <div class="container" style="padding: 40px;">
   <h1>Java Magic Link Example</h1>
 
+  <div><a class="btn btn-link" href="/">Back to home</a></div>
+
   <div class="alert alert-danger" role="alert">There was an error creating your magic link session: ${errorMessage.isEmpty() ? "unknown error" : errorMessage}.</div>
 </div>
