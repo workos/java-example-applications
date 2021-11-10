@@ -55,7 +55,7 @@ public class WebhooksApp {
         payload,
         signatureHeader,
         webhookSecret,
-        360
+        3000
       );
       String webhookJson =  mapper
         .writerWithDefaultPrettyPrinter()
