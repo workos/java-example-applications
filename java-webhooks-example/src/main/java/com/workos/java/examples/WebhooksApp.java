@@ -33,6 +33,11 @@ public class WebhooksApp {
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
     webhookSecret = env.get("WORKOS_WEBHOOK_SECRET");
 
+    if (webhookSecret == null || webhookSecret.isEmpty()) {
+      throw new IllegalArgumentException(
+        "You must export an environment variable with WORKOS_WEBHOOK_SECRET");
+    }
+
     app.get("/", ctx -> ctx.render("home.jte"));
     app.post("/webhooks", this::webhooks);
   }
@@ -50,7 +55,7 @@ public class WebhooksApp {
         payload,
         signatureHeader,
         webhookSecret,
-        360
+        3000
       );
       String webhookJson =  mapper
         .writerWithDefaultPrettyPrinter()
