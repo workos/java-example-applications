@@ -1,15 +1,12 @@
 package com.workos.java.examples;
 
 import com.workos.WorkOS;
-import com.workos.common.exceptions.UnprocessableEntityException;
-import com.workos.common.http.UnprocessableEntityExceptionResponse.EntityError;
 import com.workos.passwordless.PasswordlessApi.CreateSessionOptions;
 import com.workos.passwordless.models.PasswordlessSession;
 import com.workos.sso.models.ProfileAndToken;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 public class MagicLinkApp {

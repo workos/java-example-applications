@@ -45,7 +45,7 @@ public class DirectorySyncApp {
     String before = ctx.queryParam("before");
     String deleteResult = ctx.queryParam("deleteResult");
 
-    PaginationParams.Builder paginationParams = PaginationParams.builder();
+    PaginationParams.PaginationParamsBuilder paginationParams = PaginationParams.builder();
 
     if (after != null) {
       paginationParams.after(after);
@@ -83,7 +83,7 @@ public class DirectorySyncApp {
     String after = ctx.queryParam("after");
     String before = ctx.queryParam("before");
 
-    ListDirectoryUserOptions.Builder options = ListDirectoryUserOptions.builder()
+    ListDirectoryUserOptions.ListDirectoryUserOptionsBuilder options = ListDirectoryUserOptions.builder()
       .directory(directoryId);
 
     if (after != null) {
@@ -131,7 +131,7 @@ public class DirectorySyncApp {
     String after = ctx.queryParam("after");
     String before = ctx.queryParam("before");
 
-    ListDirectoryGroupOptions.Builder options = ListDirectoryGroupOptions.builder()
+    ListDirectoryGroupOptions.ListDirectoryGroupOptionsBuilder options = ListDirectoryGroupOptions.builder()
       .directory(directoryId);
 
     if (after != null) {
