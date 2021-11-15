@@ -36,9 +36,7 @@ WORKOS_API_KEY = your_api_key_here;
 WORKOS_CLIENT_ID = your_client_id_here;
 ```
 
-4. Set your [Default Redirect Link](https://dashboard.workos.com/configuration).
-
-## Run the server and log in using SSO
+## Run the server
 
 ```sh
 ./gradlew :java-admin-portal-example:run
