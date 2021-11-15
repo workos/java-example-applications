@@ -1,6 +1,5 @@
 package com.workos.java.examples;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workos.WorkOS;
@@ -74,7 +73,7 @@ public class DirectorySyncApp {
       deleteResult = "failed";
     }
 
-    ctx.redirect("/directories?deleteResult=" +  deleteResult);
+    ctx.redirect("/directories?deleteResult=" + deleteResult);
   }
 
   public void directoryUsers(Context ctx) {
@@ -82,8 +81,8 @@ public class DirectorySyncApp {
     String after = ctx.queryParam("after");
     String before = ctx.queryParam("before");
 
-    ListDirectoryUserOptions.ListDirectoryUserOptionsBuilder options = ListDirectoryUserOptions.builder()
-      .directory(directoryId);
+    ListDirectoryUserOptions.ListDirectoryUserOptionsBuilder options =
+        ListDirectoryUserOptions.builder().directory(directoryId);
 
     if (after != null) {
       options.after(after);
@@ -93,8 +92,7 @@ public class DirectorySyncApp {
       options.before(before);
     }
 
-    DirectoryUserList directoryUserList = workos.directorySync.listDirectoryUsers(
-      options.build());
+    DirectoryUserList directoryUserList = workos.directorySync.listDirectoryUsers(options.build());
 
     Map<String, Object> jteParams = new HashMap<>();
     jteParams.put("directoryUsers", directoryUserList);
@@ -111,8 +109,7 @@ public class DirectorySyncApp {
     String directoryUserJson;
     boolean error = false;
     try {
-      directoryUserJson = mapper.writerWithDefaultPrettyPrinter()
-        .writeValueAsString(directoryUser);
+      directoryUserJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(directoryUser);
     } catch (JsonProcessingException e) {
       directoryUserJson = "{}";
       error = true;
@@ -131,8 +128,8 @@ public class DirectorySyncApp {
     String after = ctx.queryParam("after");
     String before = ctx.queryParam("before");
 
-    ListDirectoryGroupOptions.ListDirectoryGroupOptionsBuilder options = ListDirectoryGroupOptions.builder()
-      .directory(directoryId);
+    ListDirectoryGroupOptions.ListDirectoryGroupOptionsBuilder options =
+        ListDirectoryGroupOptions.builder().directory(directoryId);
 
     if (after != null) {
       options.after(after);
@@ -142,10 +139,10 @@ public class DirectorySyncApp {
       options.before(before);
     }
 
-    DirectoryGroupList directoryGroupList = workos.directorySync.listDirectoryGroups(
-      options.build());
+    DirectoryGroupList directoryGroupList =
+        workos.directorySync.listDirectoryGroups(options.build());
 
-    Map<String, Object>jteParams = new HashMap<>();
+    Map<String, Object> jteParams = new HashMap<>();
     jteParams.put("directoryGroups", directoryGroupList);
     jteParams.put("directoryId", directoryId);
 
@@ -160,8 +157,8 @@ public class DirectorySyncApp {
     String directoryGroupJson;
     boolean error = false;
     try {
-      directoryGroupJson = mapper.writerWithDefaultPrettyPrinter()
-        .writeValueAsString(directoryGroup);
+      directoryGroupJson =
+          mapper.writerWithDefaultPrettyPrinter().writeValueAsString(directoryGroup);
     } catch (JsonProcessingException e) {
       directoryGroupJson = "{}";
       error = true;

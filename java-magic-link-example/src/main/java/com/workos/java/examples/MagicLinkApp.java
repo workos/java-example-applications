@@ -25,7 +25,8 @@ public class MagicLinkApp {
     clientId = env.get("WORKOS_CLIENT_ID");
 
     if (clientId == null || clientId.isEmpty()) {
-      throw new IllegalArgumentException("`WORKOS_CLIENT_ID` environment variable must be set. You can retrieve this from https://dashboard.workos.com/configuration");
+      throw new IllegalArgumentException(
+          "`WORKOS_CLIENT_ID` environment variable must be set. You can retrieve this from https://dashboard.workos.com/configuration");
     }
 
     Javalin app = Javalin.create().start(7003);
@@ -40,11 +41,12 @@ public class MagicLinkApp {
       String email = ctx.formParam("email");
 
       assert email != null;
-      CreateSessionOptions options = CreateSessionOptions.builder()
-        .email(email)
-        .redirectUri("http://localhost:7004" + redirectUrl)
-        .state("myCustomApplicationState")
-        .build();
+      CreateSessionOptions options =
+          CreateSessionOptions.builder()
+              .email(email)
+              .redirectUri("http://localhost:7004" + redirectUrl)
+              .state("myCustomApplicationState")
+              .build();
 
       PasswordlessSession session = workos.passwordless.createSession(options);
 
@@ -77,7 +79,6 @@ public class MagicLinkApp {
       ctx.render("profile.jte", jteParams);
     }
   }
-
 
   public static void main(String[] args) {
     new MagicLinkApp();

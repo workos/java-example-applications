@@ -27,25 +27,23 @@ public class AdminPortalApp {
   }
 
   public void ssoPortal(Context ctx) {
-    Link url = workos.portal.generateLink(
-      GeneratePortalLinkOptions
-        .builder()
-        .organization(organizationId)
-        .intent(Intent.Sso)
-        .build()
-    );
+    Link url =
+        workos.portal.generateLink(
+            GeneratePortalLinkOptions.builder()
+                .organization(organizationId)
+                .intent(Intent.Sso)
+                .build());
 
     ctx.redirect(url.link);
   }
 
   public void dsyncPortal(Context ctx) {
-    Link url = workos.portal.generateLink(
-      GeneratePortalLinkOptions
-        .builder()
-        .organization(organizationId)
-        .intent(Intent.DirectorySync)
-        .build()
-    );
+    Link url =
+        workos.portal.generateLink(
+            GeneratePortalLinkOptions.builder()
+                .organization(organizationId)
+                .intent(Intent.DirectorySync)
+                .build());
 
     ctx.redirect(url.link);
   }
