@@ -4,6 +4,7 @@ import com.workos.WorkOS;
 import com.workos.passwordless.PasswordlessApi.CreateSessionOptions;
 import com.workos.passwordless.models.PasswordlessSession;
 import com.workos.sso.models.ProfileAndToken;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import java.util.Collections;
@@ -19,7 +20,7 @@ public class MagicLinkApp {
   private final String clientId;
 
   public MagicLinkApp() {
-    Map<String, String> env = System.getenv();
+    Dotenv env = Dotenv.configure().directory("../.env").load();
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
     clientId = env.get("WORKOS_CLIENT_ID");
 
@@ -27,7 +28,7 @@ public class MagicLinkApp {
       throw new IllegalArgumentException("`WORKOS_CLIENT_ID` environment variable must be set. You can retrieve this from https://dashboard.workos.com/configuration");
     }
 
-    Javalin app = Javalin.create().start(7004);
+    Javalin app = Javalin.create().start(7003);
 
     app.get("/", ctx -> ctx.render("home.jte"));
     app.get(redirectUrl, this::callback);

@@ -2,9 +2,9 @@ package com.workos.java.examples;
 
 import com.workos.WorkOS;
 import com.workos.sso.models.ProfileAndToken;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import java.util.Map;
 import java.util.Collections;
 
 public class SsoApp {
@@ -13,9 +13,9 @@ public class SsoApp {
   private final String clientId;
 
   public SsoApp() {
-    Map<String, String> env = System.getenv();
+    Dotenv env = Dotenv.configure().directory("../.env").load();
 
-    Javalin app = Javalin.create().start(7006);
+    Javalin app = Javalin.create().start(7004);
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
     clientId = env.get("WORKOS_CLIENT_ID");

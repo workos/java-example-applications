@@ -16,4 +16,6 @@ dependencies {
   }
 
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
+
+  implementation("io.github.cdimascio:java-dotenv:5.2.2")
 }

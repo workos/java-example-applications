@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workos.WorkOS;
 import com.workos.webhooks.models.Webhook;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.websocket.WsContext;
@@ -22,7 +23,7 @@ public class WebhooksApp {
   private final String webhookSecret;
 
   public WebhooksApp() {
-    Map<String, String> env = System.getenv();
+    Dotenv env = Dotenv.configure().directory("../.env").load();
 
     Javalin app = Javalin.create()
       .ws("/webhooks-ws", ws -> {
@@ -35,7 +36,7 @@ public class WebhooksApp {
 
     if (webhookSecret == null || webhookSecret.isEmpty()) {
       throw new IllegalArgumentException(
-        "You must export an environment variable with WORKOS_WEBHOOK_SECRET");
+        "You must add the WORKOS_WEBHOOK_SECRET environment variable to the .env file");
     }
 
     app.get("/", ctx -> ctx.render("home.jte"));

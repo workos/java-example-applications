@@ -13,6 +13,7 @@ import com.workos.directorysync.models.DirectoryList;
 import com.workos.directorysync.models.DirectoryUserList;
 import com.workos.directorysync.models.Group;
 import com.workos.directorysync.models.User;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import java.util.HashMap;
@@ -24,9 +25,9 @@ public class DirectorySyncApp {
   private final ObjectMapper mapper = new ObjectMapper();
 
   public DirectorySyncApp() {
-    Map<String, String> env = System.getenv();
+    Dotenv env = Dotenv.configure().directory("../.env").load();
 
-    Javalin app = Javalin.create().start(7003);
+    Javalin app = Javalin.create().start(7002);
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
     app.get("/", ctx -> ctx.render("home.jte"));
