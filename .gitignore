@@ -16,3 +16,6 @@ bin
 
 # Ignore JTE compiled templates
 jte-classes
+
+# Ignore .env files for storing secrets
+.env

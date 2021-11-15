@@ -1,23 +1,16 @@
-# WorkOS Java Example Applications
+# Java Example Applications powered by WorkOS
 
-Run the following command to start all example applications in parallel.
+Example applications demonstrating to use the [WorkOS Kotlin/Java SDK](https://github.com/workos-inc/workos-kotlin) for SSO, Directory Sync, Admin Portal, Magic Link and Webhooks.
 
-```
-./gradlew run
-```
+## For more information, please see the following guides:
 
-Or run individual applications like so.
+- [Single Sign-On](https://workos.com/docs/sso/guide)
+- [Directory Sync](https://workos.com/docs/directory-sync/guide)
+- [Admin Portal](https://workos.com/docs/admin-portal/guide)
+- [Magic Link](https://workos.com/docs/magic-link/guide)
 
-```
-./gradlew :java-sso-example:run
-```
+- [API Reference](https://workos.com/docs/reference)
 
-## Using Local SDK Version
+## Need help?
 
-If you would like to run the example applications with a version of the SDK published to your local Maven repository, simple pass the `-Pversion` flag.
-
-```
-./gradlew :java-sso-example:run -PsdkVersion=my-version
-```
-
-Note that Gradle will first attempt pulling the version from Maven Central, so the local version cannot be a previously published version.
+If you get stuck and aren't able to resolve the issue by reading our [WorkOS Java SDK documentation](https://workos.com/docs/reference/client-libraries?sdk=java) or [API reference](https://workos.com/docs/reference), you can reach out to us at support@workos.com and we'll lend a hand!

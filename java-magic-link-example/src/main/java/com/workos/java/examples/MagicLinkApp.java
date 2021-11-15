@@ -4,6 +4,7 @@ import com.workos.WorkOS;
 import com.workos.passwordless.PasswordlessApi.CreateSessionOptions;
 import com.workos.passwordless.models.PasswordlessSession;
 import com.workos.sso.models.ProfileAndToken;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import java.util.Collections;
@@ -19,15 +20,16 @@ public class MagicLinkApp {
   private final String clientId;
 
   public MagicLinkApp() {
-    Map<String, String> env = System.getenv();
+    Dotenv env = Dotenv.configure().directory("../.env").load();
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
     clientId = env.get("WORKOS_CLIENT_ID");
 
     if (clientId == null || clientId.isEmpty()) {
-      throw new IllegalArgumentException("`WORKOS_CLIENT_ID` environment variable must be set. You can retrieve this from https://dashboard.workos.com/configuration");
+      throw new IllegalArgumentException(
+          "`WORKOS_CLIENT_ID` environment variable must be set. You can retrieve this from https://dashboard.workos.com/configuration");
     }
 
-    Javalin app = Javalin.create().start(7004);
+    Javalin app = Javalin.create().start(7003);
 
     app.get("/", ctx -> ctx.render("home.jte"));
     app.get(redirectUrl, this::callback);
@@ -39,11 +41,12 @@ public class MagicLinkApp {
       String email = ctx.formParam("email");
 
       assert email != null;
-      CreateSessionOptions options = CreateSessionOptions.builder()
-        .email(email)
-        .redirectUri("http://localhost:7004" + redirectUrl)
-        .state("myCustomApplicationState")
-        .build();
+      CreateSessionOptions options =
+          CreateSessionOptions.builder()
+              .email(email)
+              .redirectUri("http://localhost:7004" + redirectUrl)
+              .state("myCustomApplicationState")
+              .build();
 
       PasswordlessSession session = workos.passwordless.createSession(options);
 
@@ -76,7 +79,6 @@ public class MagicLinkApp {
       ctx.render("profile.jte", jteParams);
     }
   }
-
 
   public static void main(String[] args) {
     new MagicLinkApp();

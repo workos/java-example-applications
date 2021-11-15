@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workos.WorkOS;
 import com.workos.webhooks.models.Webhook;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.websocket.WsContext;
@@ -22,20 +23,23 @@ public class WebhooksApp {
   private final String webhookSecret;
 
   public WebhooksApp() {
-    Map<String, String> env = System.getenv();
+    Dotenv env = Dotenv.configure().directory("../.env").load();
 
-    Javalin app = Javalin.create()
-      .ws("/webhooks-ws", ws -> {
-        ws.onConnect(ctx -> webSocketSessions.put(ctx, wsSessionId += 1));
-        ws.onClose(webSocketSessions::remove);
-      })
-      .start(7005);
+    Javalin app =
+        Javalin.create()
+            .ws(
+                "/webhooks-ws",
+                ws -> {
+                  ws.onConnect(ctx -> webSocketSessions.put(ctx, wsSessionId += 1));
+                  ws.onClose(webSocketSessions::remove);
+                })
+            .start(7005);
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
     webhookSecret = env.get("WORKOS_WEBHOOK_SECRET");
 
     if (webhookSecret == null || webhookSecret.isEmpty()) {
       throw new IllegalArgumentException(
-        "You must export an environment variable with WORKOS_WEBHOOK_SECRET");
+          "You must add the WORKOS_WEBHOOK_SECRET environment variable to the .env file");
     }
 
     app.get("/", ctx -> ctx.render("home.jte"));
@@ -51,15 +55,8 @@ public class WebhooksApp {
       if (signatureHeader == null) {
         signatureHeader = "";
       }
-      Webhook wh = workos.webhooks.constructEvent(
-        payload,
-        signatureHeader,
-        webhookSecret,
-        3000
-      );
-      String webhookJson =  mapper
-        .writerWithDefaultPrettyPrinter()
-        .writeValueAsString(wh);
+      Webhook wh = workos.webhooks.constructEvent(payload, signatureHeader, webhookSecret, 3000);
+      String webhookJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(wh);
 
       this.broadcastWebhookReceived(webhookJson);
     } catch (SignatureException e) {
@@ -75,8 +72,9 @@ public class WebhooksApp {
   }
 
   public void broadcastWebhookReceived(String webhookJson) {
-    webSocketSessions.keySet().stream().filter(ctx -> ctx.session.isOpen())
-      .forEach(session -> session.send(webhookJson));
+    webSocketSessions.keySet().stream()
+        .filter(ctx -> ctx.session.isOpen())
+        .forEach(session -> session.send(webhookJson));
   }
 
   public static void main(String[] args) {
