@@ -33,7 +33,7 @@ public class SsoApp {
     String url =
         workos
             .sso
-            .getAuthorizationUrl(clientId, "http://localhost:7006/callback")
+            .getAuthorizationUrl(clientId, "http://localhost:7004/callback")
             .domain("gmail.com")
             .build();
 

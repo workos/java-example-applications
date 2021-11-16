@@ -1,6 +1,5 @@
 body {
     font-family: Inter, sans-serif;
-    background-color: red;
 }
 
 .container_login {
@@ -156,7 +155,7 @@ div.text_box {
     padding: 7px 7px 7px 10px;
 }
 .logged_in_nav p {
-    padding: 4px 0px 0px 15px;
+    padding: 10px 0px 0px 4px;
     line-height: 1;
     color: white;
 }
