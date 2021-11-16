@@ -5,6 +5,7 @@ import com.workos.sso.models.ProfileAndToken;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import io.javalin.http.staticfiles.Location;
 import java.util.Collections;
 
 public class SsoApp {
@@ -15,7 +16,10 @@ public class SsoApp {
   public SsoApp() {
     Dotenv env = Dotenv.configure().directory("../.env").load();
 
-    Javalin app = Javalin.create().start(7004);
+    Javalin app = Javalin.create(config -> {
+      config.addStaticFiles("src/resources", Location.EXTERNAL);
+    }).start(7004);
+
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
     clientId = env.get("WORKOS_CLIENT_ID");
