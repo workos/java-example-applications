@@ -32,11 +32,17 @@ An example application demonstrating to use the [WorkOS Kotlin/Java SDK](https:/
    following environment variables (using values found above):
 
 ```typescript
-WORKOS_API_KEY = your_api_key_here;
-WORKOS_CLIENT_ID = your_client_id_here;
+WORKOS_API_KEY=your_api_key_here;
+WORKOS_CLIENT_ID=your_client_id_here;
 ```
 
 4. Set your [Default Redirect Link](https://dashboard.workos.com/configuration) to `http://localhost:7004/callback`.
+
+## Source your enivornment variables
+
+```sh
+source.env
+```
 
 ## Run the server and log in using SSO
 
