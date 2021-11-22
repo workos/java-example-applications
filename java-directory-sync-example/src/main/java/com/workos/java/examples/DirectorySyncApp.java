@@ -15,6 +15,7 @@ import com.workos.directorysync.models.User;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import io.javalin.http.staticfiles.Location;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,11 @@ public class DirectorySyncApp {
   public DirectorySyncApp() {
     Dotenv env = Dotenv.configure().directory("../.env").load();
 
-    Javalin app = Javalin.create().start(7001);
+    Javalin app = Javalin.create(config -> {
+      config.addStaticFiles("src/resources", Location.EXTERNAL);
+    }).start(7001);
+
+
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
     app.get("/", ctx -> ctx.render("home.jte"));
