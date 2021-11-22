@@ -10,7 +10,7 @@
   var webhooksView = document.getElementById('webhooks-view');
 
   function setupWebSocket() {
-    var ws = new WebSocket('ws://localhost:7005/webhooks-ws');
+    var ws = new WebSocket('ws://localhost:7001/webhooks-ws');
     ws.onmessage = addWebhook;
   }
 

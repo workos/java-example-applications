@@ -42,7 +42,7 @@ WORKOS_CLIENT_ID = your_client_id_here;
 ./gradlew :java-directory-sync-example:run
 ```
 
-Head to `http://localhost:7002/` to begin!
+Head to `http://localhost:7001/` to begin!
 
 ## Need help?
 
