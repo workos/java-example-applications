@@ -31,6 +31,7 @@ public class DirectorySyncApp {
       config.addStaticFiles("src/resources", Location.EXTERNAL);
     }).start(7001);
 
+
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
     app.get("/", ctx -> ctx.render("home.jte"));
