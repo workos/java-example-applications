@@ -7,18 +7,22 @@ import com.workos.portal.models.Link;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import io.javalin.http.staticfiles.Location;
 
 public class AdminPortalApp {
   private Javalin app;
 
   private WorkOS workos;
 
-  private String organizationId = "org_01FHB9XB2XJDBJ6CN1AR404D4X";
+  private String organizationId = "org_01FGM2T96YX19Z4HENZ1AC7848";
 
   public AdminPortalApp() {
     Dotenv env = Dotenv.configure().directory("../.env").load();
 
-    app = Javalin.create().start(7001);
+    Javalin app = Javalin.create(config -> {
+      config.addStaticFiles("src/resources", Location.EXTERNAL);
+    }).start(7001);
+
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
     app.get("/", ctx -> ctx.render("home.jte"));
