@@ -99,7 +99,7 @@ public class WebhooksApp {
     }
 
     if (we instanceof DirectoryDeletedEvent) {
-      System.out.println(we.event + " Directory: " + ((DirectoryDeactivatedEvent) we).data.name + " deleted.");
+      System.out.println(we.event + " Directory: " + ((DirectoryDeletedEvent) we).data.name + " deleted.");
     }
 
     if (we instanceof DirectoryUserCreatedEvent) {
