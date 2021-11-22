@@ -29,7 +29,7 @@ public class MagicLinkApp {
           "`WORKOS_CLIENT_ID` environment variable must be set. You can retrieve this from https://dashboard.workos.com/configuration");
     }
 
-    Javalin app = Javalin.create().start(7003);
+    Javalin app = Javalin.create().start(7001);
 
     app.get("/", ctx -> ctx.render("home.jte"));
     app.get(redirectUrl, this::callback);
@@ -44,7 +44,7 @@ public class MagicLinkApp {
       CreateSessionOptions options =
           CreateSessionOptions.builder()
               .email(email)
-              .redirectUri("http://localhost:7004" + redirectUrl)
+              .redirectUri("http://localhost:7001" + redirectUrl)
               .state("myCustomApplicationState")
               .build();
 

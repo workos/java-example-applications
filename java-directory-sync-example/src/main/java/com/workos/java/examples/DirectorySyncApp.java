@@ -26,7 +26,7 @@ public class DirectorySyncApp {
   public DirectorySyncApp() {
     Dotenv env = Dotenv.configure().directory("../.env").load();
 
-    Javalin app = Javalin.create().start(7002);
+    Javalin app = Javalin.create().start(7001);
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
     app.get("/", ctx -> ctx.render("home.jte"));
