@@ -2,14 +2,13 @@
 
 An example application demonstrating to use the [WorkOS Kotlin/Java SDK](https://github.com/workos-inc/workos-kotlin) to authenticate users via SSO.
 
-## Node Project Setup
+## Java Project Setup
 
 1. In your CLI, navigate to the directory into which you want to clone this git repo.
 
    ```bash
    $ cd ~/Desktop/
    ```
-
 2. Clone the main repo and install dependencies for the app you'd like to use:
 
    ```bash
@@ -35,8 +34,15 @@ An example application demonstrating to use the [WorkOS Kotlin/Java SDK](https:/
 WORKOS_API_KEY = your_api_key_here;
 WORKOS_CLIENT_ID = your_client_id_here;
 ```
-
-4. Set your [Default Redirect Link](https://dashboard.workos.com/configuration) to `http://localhost:7001/callback`.
+4. Source the environment variables from the root of the project by running the following in the terminal.
+```shell
+source .env
+```
+5. Check that the env variables are available to your app by running the following in the terminal.
+```shell
+echo $WORKOS_API_KEY
+```
+6. Set your [Default Redirect Link](https://dashboard.workos.com/configuration) to `http://localhost:7001/callback`.
 
 ## Run the server
 
