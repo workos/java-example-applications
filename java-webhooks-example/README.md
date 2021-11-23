@@ -41,6 +41,10 @@ Then populate the following environment variable in your `.env` file at the root
 ```sh
 WORKOS_WEBHOOK_SECRET=your_webhook_secret
 ```
+Be sure to source the env variables so the application has access to them. 
+```shell
+source .env
+```
 
 ### 5. Run the sample application
 

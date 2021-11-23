@@ -21,6 +21,7 @@ import com.workos.webhooks.models.WebhookEvent;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import io.javalin.http.staticfiles.Location;
 import io.javalin.websocket.WsContext;
 import java.security.SignatureException;
 import java.util.Map;
@@ -40,14 +41,17 @@ public class WebhooksApp {
     Dotenv env = Dotenv.configure().directory("../.env").load();
 
     Javalin app =
-        Javalin.create()
+        Javalin.create(config ->
+            config.addStaticFiles("src/resources", Location.EXTERNAL)
+          )
             .ws(
                 "/webhooks-ws",
                 ws -> {
                   ws.onConnect(ctx -> webSocketSessions.put(ctx, wsSessionId += 1));
                   ws.onClose(webSocketSessions::remove);
                 })
-            .start(7005);
+            .start(7001);
+
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
     webhookSecret = env.get("WORKOS_WEBHOOK_SECRET");
 

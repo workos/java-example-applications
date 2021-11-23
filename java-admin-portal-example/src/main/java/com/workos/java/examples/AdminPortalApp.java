@@ -1,6 +1,10 @@
 package com.workos.java.examples;
 
 import com.workos.WorkOS;
+import com.workos.organizations.OrganizationsApi.CreateOrganizationOptions;
+import com.workos.organizations.OrganizationsApi.ListOrganizationsOptions;
+import com.workos.organizations.models.Organization;
+import com.workos.organizations.models.OrganizationList;
 import com.workos.portal.PortalApi.GeneratePortalLinkOptions;
 import com.workos.portal.models.Intent;
 import com.workos.portal.models.Link;
@@ -8,29 +12,32 @@ import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
+import java.util.List;
 
 public class AdminPortalApp {
-  private Javalin app;
-
   private WorkOS workos;
-
-  private String organizationId = "org_01FGM2T96YX19Z4HENZ1AC7848";
 
   public AdminPortalApp() {
     Dotenv env = Dotenv.configure().directory("../.env").load();
 
-    Javalin app = Javalin.create(config -> {
-      config.addStaticFiles("src/resources", Location.EXTERNAL);
-    }).start(7001);
+    Javalin app =
+        Javalin.create(
+                config -> {
+                  config.addStaticFiles("src/resources", Location.EXTERNAL);
+                })
+            .start(7001);
 
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
     app.get("/", ctx -> ctx.render("home.jte"));
-    app.get("/admin_portal/sso", this::ssoPortal);
-    app.get("/admin_portal/dsync", this::dsyncPortal);
+    app.get("/admin-portal/sso", this::ssoPortal);
+    app.get("/admin-portal/dsync", this::dsyncPortal);
+    app.post("/provision-enterprise", this::provisionEnterprise);
   }
 
   public void ssoPortal(Context ctx) {
+    String organizationId = ctx.cookie("organizationId");
+
     Link url =
         workos.portal.generateLink(
             GeneratePortalLinkOptions.builder()
@@ -42,6 +49,8 @@ public class AdminPortalApp {
   }
 
   public void dsyncPortal(Context ctx) {
+    String organizationId = ctx.cookie("organizationId");
+
     Link url =
         workos.portal.generateLink(
             GeneratePortalLinkOptions.builder()
@@ -50,6 +59,33 @@ public class AdminPortalApp {
                 .build());
 
     ctx.redirect(url.link);
+  }
+
+  public void provisionEnterprise(Context ctx) {
+    String organizationName = ctx.formParam("org");
+    String domain = ctx.formParam("domain");
+
+    List<String> domains = List.of(domain.split(" "));
+
+    OrganizationList list =
+        workos.organizations.listOrganizations(
+            ListOrganizationsOptions.builder().domains(domains).build());
+
+    String organizationId;
+
+    if (list.data.size() == 0) {
+      Organization organization =
+          workos.organizations.createOrganization(
+              CreateOrganizationOptions.builder().name(organizationName).domains(domains).build());
+
+      organizationId = organization.id;
+    } else {
+      organizationId = list.data.get(0).id;
+    }
+
+    ctx.cookie("organizationId", organizationId);
+
+    ctx.render("provision.jte");
   }
 
   public static void main(String[] args) {
