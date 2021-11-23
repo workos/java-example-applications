@@ -36,7 +36,7 @@ WORKOS_API_KEY = your_api_key_here;
 WORKOS_CLIENT_ID = your_client_id_here;
 ```
 
-4. Set your [Default Redirect Link](https://dashboard.workos.com/configuration) to `http://localhost:7003/callback`.
+4. Set your [Default Redirect Link](https://dashboard.workos.com/configuration) to `http://localhost:7001/callback`.
 
 ## Run the server
 
@@ -44,7 +44,7 @@ WORKOS_CLIENT_ID = your_client_id_here;
 ./gradlew :java-magic-link-example:run
 ```
 
-Head to `http://localhost:7003/` to begin!
+Head to `http://localhost:7001/` to begin!
 
 ## Need help?
 

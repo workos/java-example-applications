@@ -18,7 +18,7 @@ public class SsoApp {
 
     Javalin app = Javalin.create(config -> {
       config.addStaticFiles("src/resources", Location.EXTERNAL);
-    }).start(7004);
+    }).start(7001);
 
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
@@ -33,7 +33,7 @@ public class SsoApp {
     String url =
         workos
             .sso
-            .getAuthorizationUrl(clientId, "http://localhost:7004/callback")
+            .getAuthorizationUrl(clientId, "http://localhost:7001/callback")
             .domain("gmail.com")
             .build();
 

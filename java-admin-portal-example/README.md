@@ -2,7 +2,7 @@
 
 An example application demonstrating to use the [WorkOS Kotlin/Java SDK](https://github.com/workos-inc/workos-kotlin) to access the Admin Portal for SSO and Directory Sync.
 
-## Node Project Setup
+## Java Project Setup
 
 1. In your CLI, navigate to the directory into which you want to clone this git repo.
 
@@ -35,6 +35,20 @@ An example application demonstrating to use the [WorkOS Kotlin/Java SDK](https:/
 WORKOS_API_KEY = your_api_key_here;
 WORKOS_CLIENT_ID = your_client_id_here;
 ```
+4. In the terminal, run the following command to link the environment variables.
+```sh
+source .env
+```
+5. Confirm that the environment variables are available to the application in the terminal
+```sh
+echo $WORKOS_API_KEY
+```
+6. Open the AdminPortalApp.java file and enter the Organization ID for the Org you'd 
+like to launch Admin Portal flow for on line 17. The Org ID can be found in your WorkOS Dashboard.
+
+7. In the Configuration screen of your WorkOS Dashboard, set the Admin Portal Redirect Link to
+determine where the user will get redirected to after completing the Admin Portal flow. 
+
 
 ## Run the server
 
