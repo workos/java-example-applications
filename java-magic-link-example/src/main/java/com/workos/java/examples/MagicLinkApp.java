@@ -7,6 +7,7 @@ import com.workos.sso.models.ProfileAndToken;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import io.javalin.http.staticfiles.Location;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +30,9 @@ public class MagicLinkApp {
           "`WORKOS_CLIENT_ID` environment variable must be set. You can retrieve this from https://dashboard.workos.com/configuration");
     }
 
-    Javalin app = Javalin.create().start(7001);
+    Javalin app = Javalin.create(config -> {
+      config.addStaticFiles("src/resources", Location.EXTERNAL);
+    }).start(7001);
 
     app.get("/", ctx -> ctx.render("home.jte"));
     app.get(redirectUrl, this::callback);
