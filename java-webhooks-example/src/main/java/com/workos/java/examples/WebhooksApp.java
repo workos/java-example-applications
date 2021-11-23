@@ -3,6 +3,9 @@ package com.workos.java.examples;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workos.WorkOS;
+import com.workos.webhooks.models.ConnectionActivatedEvent;
+import com.workos.webhooks.models.ConnectionDeactivatedEvent;
+import com.workos.webhooks.models.ConnectionDeletedEvent;
 import com.workos.webhooks.models.DirectoryActivatedEvent;
 import com.workos.webhooks.models.DirectoryDeactivatedEvent;
 import com.workos.webhooks.models.DirectoryDeletedEvent;
@@ -44,7 +47,7 @@ public class WebhooksApp {
                   ws.onConnect(ctx -> webSocketSessions.put(ctx, wsSessionId += 1));
                   ws.onClose(webSocketSessions::remove);
                 })
-            .start(7001);
+            .start(7005);
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
     webhookSecret = env.get("WORKOS_WEBHOOK_SECRET");
 
@@ -90,6 +93,18 @@ public class WebhooksApp {
   }
 
   private void logWebhook(WebhookEvent we) {
+    if (we instanceof ConnectionActivatedEvent) {
+      System.out.println(we.event + " Connection: " + ((ConnectionActivatedEvent) we).data.name + " activated.");
+    }
+
+    if (we instanceof ConnectionDeactivatedEvent) {
+      System.out.println(we.event + " Connection: " + ((ConnectionDeactivatedEvent) we).data.name + " deactivated.");
+    }
+
+    if (we instanceof ConnectionDeletedEvent) {
+      System.out.println(we.event + " Connection: " + ((ConnectionDeletedEvent) we).data.name + " deleted.");
+    }
+
     if (we instanceof DirectoryActivatedEvent) {
       System.out.println(we.event + " Directory: " + ((DirectoryActivatedEvent) we).data.name + " activated.");
     }
