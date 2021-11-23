@@ -25,6 +25,6 @@ tasks.test {
 java {
   toolchain {
     // Determines JDK version used for compilation. See https://docs.gradle.org/current/userguide/toolchains.html
-    languageVersion.set(JavaLanguageVersion.of(8))
+    languageVersion.set(JavaLanguageVersion.of(11))
   }
 }
