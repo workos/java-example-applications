@@ -3,7 +3,21 @@ package com.workos.java.examples;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workos.WorkOS;
-import com.workos.webhooks.models.Webhook;
+import com.workos.webhooks.models.ConnectionActivatedEvent;
+import com.workos.webhooks.models.ConnectionDeactivatedEvent;
+import com.workos.webhooks.models.ConnectionDeletedEvent;
+import com.workos.webhooks.models.DirectoryActivatedEvent;
+import com.workos.webhooks.models.DirectoryDeactivatedEvent;
+import com.workos.webhooks.models.DirectoryDeletedEvent;
+import com.workos.webhooks.models.DirectoryGroupCreatedEvent;
+import com.workos.webhooks.models.DirectoryGroupDeletedEvent;
+import com.workos.webhooks.models.DirectoryGroupUpdatedEvent;
+import com.workos.webhooks.models.DirectoryGroupUserAddedEvent;
+import com.workos.webhooks.models.DirectoryGroupUserRemovedEvent;
+import com.workos.webhooks.models.DirectoryUserCreatedEvent;
+import com.workos.webhooks.models.DirectoryUserDeletedEvent;
+import com.workos.webhooks.models.DirectoryUserUpdatedEvent;
+import com.workos.webhooks.models.WebhookEvent;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -27,9 +41,9 @@ public class WebhooksApp {
     Dotenv env = Dotenv.configure().directory("../.env").load();
 
     Javalin app =
-        Javalin.create(config -> {
-            config.addStaticFiles("src/resources", Location.EXTERNAL);
-          })
+        Javalin.create(config ->
+            config.addStaticFiles("src/resources", Location.EXTERNAL)
+          )
             .ws(
                 "/webhooks-ws",
                 ws -> {
@@ -47,20 +61,21 @@ public class WebhooksApp {
     }
 
     app.get("/", ctx -> ctx.render("home.jte"));
-    app.post("/webhooks", this::webhooks);
+    app.post("/webhooks", this::webhooksHandler);
   }
 
-  public void webhooks(Context ctx) {
+  private void webhooksHandler(Context ctx) {
     String payload = ctx.body();
-    System.out.println(ctx.body());
-    System.out.println(ctx.req.getHeaderNames());
+
     try {
       String signatureHeader = ctx.header("WorkOS-Signature");
       if (signatureHeader == null) {
         signatureHeader = "";
       }
-      Webhook wh = workos.webhooks.constructEvent(payload, signatureHeader, webhookSecret, 3000);
+      WebhookEvent wh = workos.webhooks.constructEvent(payload, signatureHeader, webhookSecret, 3000);
       String webhookJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(wh);
+
+      this.logWebhook(wh);
 
       this.broadcastWebhookReceived(webhookJson);
     } catch (SignatureException e) {
@@ -75,10 +90,81 @@ public class WebhooksApp {
     ctx.status(200);
   }
 
-  public void broadcastWebhookReceived(String webhookJson) {
+  private void broadcastWebhookReceived(String webhookJson) {
     webSocketSessions.keySet().stream()
         .filter(ctx -> ctx.session.isOpen())
         .forEach(session -> session.send(webhookJson));
+  }
+
+  private void logWebhook(WebhookEvent we) {
+    if (we instanceof ConnectionActivatedEvent) {
+      System.out.println(we.event + " Connection: " + ((ConnectionActivatedEvent) we).data.name + " activated.");
+    }
+
+    if (we instanceof ConnectionDeactivatedEvent) {
+      System.out.println(we.event + " Connection: " + ((ConnectionDeactivatedEvent) we).data.name + " deactivated.");
+    }
+
+    if (we instanceof ConnectionDeletedEvent) {
+      System.out.println(we.event + " Connection: " + ((ConnectionDeletedEvent) we).data.name + " deleted.");
+    }
+
+    if (we instanceof DirectoryActivatedEvent) {
+      System.out.println(we.event + " Directory: " + ((DirectoryActivatedEvent) we).data.name + " activated.");
+    }
+
+    if (we instanceof DirectoryDeactivatedEvent) {
+      System.out.println(we.event + " Directory: " + ((DirectoryDeactivatedEvent) we).data.name + " deactivated.");
+    }
+
+    if (we instanceof DirectoryDeletedEvent) {
+      System.out.println(we.event + " Directory: " + ((DirectoryDeletedEvent) we).data.name + " deleted.");
+    }
+
+    if (we instanceof DirectoryUserCreatedEvent) {
+      DirectoryUserCreatedEvent event = (DirectoryUserCreatedEvent) we;
+      System.out.println(we.event + " Directory User: " + event.data.firstName + " "
+        + event.data.lastName + " created");
+    }
+
+    if (we instanceof DirectoryUserDeletedEvent) {
+      DirectoryUserDeletedEvent event = (DirectoryUserDeletedEvent) we;
+      System.out.println(we.event + " Directory User: " + event.data.firstName + " "
+        + event.data.lastName + " deleted");
+    }
+
+    if (we instanceof DirectoryUserUpdatedEvent) {
+      DirectoryUserUpdatedEvent event = (DirectoryUserUpdatedEvent) we;
+      System.out.println(we.event + " Directory User: " + event.data.firstName + " "
+        + event.data.lastName + " updated");
+    }
+
+    if (we instanceof DirectoryGroupCreatedEvent) {
+      DirectoryGroupCreatedEvent event = (DirectoryGroupCreatedEvent) we;
+      System.out.println(we.event + " Directory Group: " + event.data.name + " created");
+    }
+
+    if (we instanceof DirectoryGroupDeletedEvent) {
+      DirectoryGroupDeletedEvent event = (DirectoryGroupDeletedEvent) we;
+      System.out.println(we.event + " Directory Group: " + event.data.name + " deleted");
+    }
+
+    if (we instanceof DirectoryGroupUpdatedEvent) {
+      DirectoryGroupUpdatedEvent event = (DirectoryGroupUpdatedEvent) we;
+      System.out.println(we.event + " Directory Group: " + event.data.name + " updated");
+    }
+
+    if (we instanceof DirectoryGroupUserAddedEvent) {
+      DirectoryGroupUserAddedEvent event = (DirectoryGroupUserAddedEvent) we;
+      System.out.println(we.event + " User: " + event.data.user.id + " added to Group: "
+        + event.data.group.id + " in Directory: " + event.data.directoryId);
+    }
+
+    if (we instanceof DirectoryGroupUserRemovedEvent) {
+      DirectoryGroupUserRemovedEvent event = (DirectoryGroupUserRemovedEvent) we;
+      System.out.println(we.event + " User: " + event.data.user.id + " removed from Group: "
+        + event.data.group.id + " in Directory: " + event.data.directoryId);
+    }
   }
 
   public static void main(String[] args) {
