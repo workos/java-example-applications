@@ -66,7 +66,7 @@ public class MagicLinkApp {
     String errorMessage = ctx.queryParam("error_description");
     String state = ctx.queryParam("state");
 
-    if (code == null || code.isBlank()) {
+    if (code == null || code == "") {
       ctx.render("error.jte", Collections.singletonMap("errorMessage", errorMessage));
     } else {
       ProfileAndToken profileAndToken = workos.sso.getProfileAndToken(code, clientId);
