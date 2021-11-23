@@ -1,15 +1,45 @@
-<link rel="stylesheet" href="main.css">
-
+<head>
+  <link rel="stylesheet" href="main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter" />
+</head>
 <body class="container_login">
-<div class='flex_column'>
-  <div class="flex heading_div">
-    <img src="images/workos_logo.png" alt="workos logo">
-    <div class="heading_text_div">
-      <h1>WorkOS</h1>
+  <div class="flex_column">
+    <div class="flex heading_div">
+      <img src="images/workos_logo.png" alt="workos logo" />
+      <div class="heading_text_div">
+        <h1>WorkOS</h1>
+      </div>
     </div>
+
+    <h2>Java Admin Portal Example App</h2>
+    <form method="POST" action="/provision-enterprise">
+      <div class="flex_column">
+        <div>
+          <input
+            type="text"
+            placeholder="Enter Your Organization Name to Provision"
+            id="org"
+            name="org"
+            class="text_input"
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            placeholder="Enter a Space Separated List of Domains Used By the Org"
+            id="domain"
+            name="domain"
+            class="text_input_2"
+            required
+          />
+        </div>
+        <div>
+          <button type="submit" class="button">
+            Create Organization and Log In
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
-  <h2>Java Directory Sync Example App</h2>
-  <a class="button login_button" href="/admin_portal/sso">Setup Single Sign On</a>
-  <a class="button login_button" href="/admin_portal/dsync">Setup Directory Sync</a>
-</div>
 </body>
