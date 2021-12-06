@@ -34,7 +34,7 @@ public class SsoApp {
         workos
             .sso
             .getAuthorizationUrl(clientId, "http://localhost:7001/callback")
-            .domain("gmail.com")
+            .provider("GoogleOAuth")
             .build();
 
     ctx.redirect(url);
