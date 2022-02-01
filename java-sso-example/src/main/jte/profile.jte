@@ -23,7 +23,6 @@
       <a href="https://workos.com/docs" target="_blank"><button class='button'>Documentation</button></a>
       <a href="https://workos.com/docs/reference" target="_blank"><button class='button'>API Reference</button></a>
       <a href="https://workos.com/blog" target="_blank"><button class='button'>Blog</button></a>
-      <a href="/"><button class='button'>Back</button></a>
     </div>
   </div>
   <div class="logged_in_div_right">
@@ -46,5 +45,6 @@
         </tr>
       </table>
     </div>
+    <a href="/logout"><button class='button'>Logout</button></a>
   </div>
 </div>

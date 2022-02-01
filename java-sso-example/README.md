@@ -41,7 +41,7 @@ $ cd java-example-applications/
 $ touch .env
 ```
 
-6. Open the new .env file with your preferred text editor and replace the placeholder values for WORKOS_API_KEY and WORKOS_CLIENT_ID:
+6. Open the new .env file with your preferred text editor and replace the placeholder values for WORKOS_API_KEY and WORKOS_CLIENT_ID.  
 ```bash
 WORKOS_API_KEY=your_api_key_here
 WORKOS_CLIENT_ID=your_project_id_here
@@ -51,8 +51,14 @@ The .env file is listed in this repo's .gitignore file, so your sensitive inform
     
 ## Set up SSO with WorkOS
 7. Create an [Organization](https://dashboard.workos.com/organizations) and an [SSO Connection](https://workos.com/docs/sso/guide/introduction) in the Organization in your WorkOS Dashboard.
+8. Copy the Connection ID from the new connection that you just set up and add it to the same .env file that you created in step 6. The .env file should now look like this: 
+```bash
+WORKOS_API_KEY=your_api_key_here
+WORKOS_CLIENT_ID=your_project_id_here
+WORKOS_CONNECTION_ID=your_connection_id_here
+```
 
-8. Add http://localhost:7001/callback as the default Redirect URI in the Configuration section of the Dashboard:
+10. Add http://localhost:7001/callback as the default Redirect URI in the Configuration section of the WorkOS Dashboard:
 
 ![A screenshot of te default Redirect URI in the WorkOS dashboard](https://assets-global.website-files.com/5f03ef1d331a69193fae6dcd/619d4e48d8ad3f0711f3b1e3_Screen%20Shot%202021-11-23%20at%2012.24.34%20PM.png)
 
