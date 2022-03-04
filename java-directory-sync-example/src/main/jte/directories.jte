@@ -83,10 +83,10 @@
         @endfor
       </table>
       @if(after != null)
-        <a class="btn btn-primary" href="/directories?after=${after}">Before</a>
+        <a class="button directory_button" href="/directories?after=${after}">Before</a>
       @endif
       @if(before != null)
-        <a class="btn btn-primary" href="/directories?before=${before}">Next</a>
+        <a class="button directory_button" href="/directories?before=${before}">Next</a>
       @endif
     </div>
   </div>
