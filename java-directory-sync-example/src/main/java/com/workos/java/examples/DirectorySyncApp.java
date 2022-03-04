@@ -3,8 +3,8 @@ package com.workos.java.examples;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workos.WorkOS;
-import com.workos.common.http.PaginationParams;
-import com.workos.common.http.PaginationParams.PaginationParamsBuilder;
+import com.workos.directorysync.DirectorySyncApi.ListDirectoriesOptions;
+import com.workos.directorysync.DirectorySyncApi.ListDirectoriesOptions.ListDirectoriesOptionsBuilder;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoryGroupOptions;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoryUserOptions;
 import com.workos.directorysync.models.DirectoryGroupList;
@@ -44,21 +44,28 @@ public class DirectorySyncApp {
   }
 
   public void directories(Context ctx) {
+    String organization = ""; // enter the organization id here to filter for a specific organization's directory
     String after = ctx.queryParam("after");
     String before = ctx.queryParam("before");
     String deleteResult = ctx.queryParam("deleteResult");
+    Integer limit = 5;
 
-    PaginationParamsBuilder<PaginationParams> paginationParams = PaginationParams.builder();
+    ListDirectoriesOptions.ListDirectoriesOptionsBuilder options =
+      ListDirectoriesOptions.builder().organization(organization);
 
     if (after != null) {
-      paginationParams.after(after);
+      options.after(after);
     }
 
     if (before != null) {
-      paginationParams.before(before);
+      options.before(before);
     }
 
-    DirectoryList directoryList = workos.directorySync.listDirectories(paginationParams.build());
+    if (limit != null) {
+      options.limit(limit);
+    }
+
+    DirectoryList directoryList = workos.directorySync.listDirectories(options.build());
 
     Map<String, Object> jteParams = new HashMap<>();
     jteParams.put("directories", directoryList);
