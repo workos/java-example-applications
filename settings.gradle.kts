@@ -12,6 +12,7 @@ include(
   "java-admin-portal-example",
   "java-directory-sync-example",
   "java-magic-link-example",
+  "java-mfa-example",
   "java-sso-example",
   "java-webhooks-example"
 )
