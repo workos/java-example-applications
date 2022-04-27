@@ -7,7 +7,11 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
 import java.util.Collections;
-
+import java.util.HashMap;
+import java.util.Map;
+import com.workos.mfa.MfaApi;
+import com.workos.mfa.MfaApi.EnrollFactorOptions;
+import com.workos.mfa.models.Factor;
 
 
 public class MfaApp {
@@ -24,56 +28,36 @@ public class MfaApp {
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
     clientId = env.get("WORKOS_CLIENT_ID");
 
-    app.get("/", this::isLoggedIn);
-    app.get("/login", this::login);
-    app.get("/callback", this::callback);
-    app.get("logout", this::logout);
-    app.get("/enroll_factor", this::enroll_factor);
+    app.get("/", ctx -> ctx.render("home.jte"));
+    app.post("/enroll_factor", this::enroll_factor);
   }
 
 
   public void enroll_factor(Context ctx) {
-    System.out.print("hit the method");
+    System.out.println("hit the method");
+    String sms = ctx.queryParam("sms");
+    String totp = ctx.queryParam("totp");
+
+
+
+    EnrollFactorOptions options = MfaApi.EnrollFactorOptions.builder()
+      .type("sms")
+      .phoneNumber("3609290957")
+      .build();
+
+
+
+    Factor factor = workos.mfa.enrollFactor(options);
+    System.out.print(factor);
+
+    Map<String, Object> jteParams = new HashMap<>();
+    jteParams.put("factors", factor);
+
+    System.out.println(jteParams);
 
     ctx.redirect("/");
   }
 
-  public void login(Context ctx) {
-    Dotenv env = Dotenv.configure().directory("../.env").load();
-    String connectionId = env.get("WORKOS_CONNECTION_ID");
-    String url =
-        workos
-            .sso
-            .getAuthorizationUrl(clientId, "http://localhost:7001/callback")
-            .connection(connectionId)
-            .build();
-
-    ctx.redirect(url);
-  }
-
-  public void callback(Context ctx) {
-    String code = ctx.queryParam("code");
-
-    assert code != null;
-    ProfileAndToken profileAndToken = workos.sso.getProfileAndToken(code, clientId);
-    ctx.sessionAttribute("profile", profileAndToken.profile);
-
-    ctx.redirect("/");
-  }
-
-  public void isLoggedIn(Context ctx) {
-
-    if (ctx.sessionAttribute("profile") != null){
-      ctx.render("profile.jte", Collections.singletonMap("profile", ctx.sessionAttribute("profile")));
-    } else {
-      ctx.render("home.jte");
-    }
-  }
-
-  public void logout(Context ctx ) {
-    ctx.sessionAttribute("profile", null);
-    ctx.redirect("/");
-  }
 
   public static void main(String[] args) {
     new MfaApp();
