@@ -10,6 +10,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,11 +31,32 @@ public class MfaApp {
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
     clientId = env.get("WORKOS_CLIENT_ID");
 
-    app.get("/", this::isLoggedIn);
-    app.get("/login", this::login);
-    app.get("/callback", this::callback);
-    app.get("logout", this::logout);
+    app.get("/", this::home);
+    app.get("clear_session", this::clear_session);
+    app.get("factor_detail", this::factor_detail);
     app.post("/enroll_factor", this::enroll_factor);
+    app.get("/enroll_factor_details", this::enroll_factor_details);
+  }
+
+
+  public void home(Context ctx) {
+    if(ctx.sessionAttribute("arrayFactorList") != null) {
+
+      System.out.println(ctx.sessionAttributeMap());
+      ArrayList<Object> factorList = ctx.sessionAttribute("arrayFactorList");
+      System.out.println(factorList);
+      ctx.render("home.jte", Collections.singletonMap("factorList", factorList));
+    } else {
+      ctx.render("home.jte");
+    }
+  }
+
+  public void factor_detail(Context ctx) {
+    ctx.render("factor_detail.jte");
+  }
+
+  public void enroll_factor_details(Context ctx ) {
+    ctx.render("enroll_factor.jte");
   }
 
   public void enroll_factor(Context ctx) {
@@ -47,59 +69,31 @@ public class MfaApp {
 
     if(ctx.sessionAttribute("factorList") != null) {
       System.out.print("hit not-null part");
-      Map<String, Factor> factorList = ctx.sessionAttribute("factorList");
-      factorList.put(factor.id, factor);
+      Map<String, Object> factorList = ctx.sessionAttribute("factorList");
+      factorList.put(String.valueOf(factorList.size()), factor);
       ctx.sessionAttribute("factorList", factorList);
     } else {
       System.out.print("hit null part");
-      Map<String, Factor> factorList = new HashMap<>();
-      factorList.put(factor.id, factor);
-
+      Map<String, Object> factorList = new HashMap<>();
+      factorList.put(String.valueOf(factorList.size()), factor);
       ctx.sessionAttribute("factorList", factorList);
     }
 
     Map<String, Factor> factorList = ctx.sessionAttribute("factorList");
+    ArrayList<Object> list = new ArrayList<Object>(factorList.values());
+    ctx.sessionAttribute("arrayFactorList", list);
 
-    System.out.println("factorlist before render");
-    System.out.println(factorList);
-
-    ctx.render("home.jte", factorList);
-  }
-
-  public void login(Context ctx) {
-    Dotenv env = Dotenv.configure().directory("../.env").load();
-    String connectionId = env.get("WORKOS_CONNECTION_ID");
-    String url =
-        workos
-            .sso
-            .getAuthorizationUrl(clientId, "http://localhost:7001/callback")
-            .connection(connectionId)
-            .build();
-
-    ctx.redirect(url);
-  }
-
-  public void callback(Context ctx) {
-    String code = ctx.queryParam("code");
-
-    assert code != null;
-    ProfileAndToken profileAndToken = workos.sso.getProfileAndToken(code, clientId);
-    ctx.sessionAttribute("profile", profileAndToken.profile);
+    System.out.println("arrayFactorList before render");
+    System.out.println(list);
 
     ctx.redirect("/");
+//    ctx.render("home.jte", Collections.singletonMap("factorList", list));
   }
 
-  public void isLoggedIn(Context ctx) {
 
-    if (ctx.sessionAttribute("profile") != null){
-      ctx.render("profile.jte", Collections.singletonMap("profile", ctx.sessionAttribute("profile")));
-    } else {
-      ctx.render("home.jte");
-    }
-  }
-
-  public void logout(Context ctx ) {
-    ctx.sessionAttribute("profile", null);
+  public void clear_session(Context ctx ) {
+    ctx.sessionAttribute("factorList", null);
+    ctx.sessionAttribute("arrayFactorList", null);
     ctx.redirect("/");
   }
 

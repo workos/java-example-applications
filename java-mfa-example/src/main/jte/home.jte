@@ -1,4 +1,4 @@
-@param java.util.ArrayList<com.workos.mfa.models.Factor> factorList
+@param java.util.ArrayList<Object> factorList
 
 <link rel="stylesheet" href="main.css">
 
@@ -28,54 +28,39 @@
   </div>
   <div class="logged_in_div_right">
     <div class="flex_column">
-      <div class="flex space_between ">
-        <div class="factor_card">
-          <h2>Enroll SMS Factor</h2>
-          <form action="/enroll_factor" method="post">
-            <div class="flex">
-              <div class="flex">
-                <input class="text_input" type="text" id="phone_number" name="phone_number"
-                       placeholder="Phone Number" required>
-              </div>
-            </div>
-            <div>
-              <button type="submit" name="type" value="sms"
-                      class="button button-outline button-sm">Enroll New
-                Factor</button>
-            </div>
-          </form>
-        </div>
 
-        <div class="factor_card">
-          <h2>Enroll TOTP Factor</h2>
-          <form method="POST" action="/enroll_factor">
-            <div class="flex-column">
-              <div class="flex">
-                <input class="text_input" type="text" id="totp_issuer" name="totp_issuer"
-                       placeholder="TOTP Issuer" required>
-              </div>
-              <div class="flex">
-                <input class="text_input" type="text" id="totp_user" name="totp_user"
-                       placeholder="User Email" required>
-              </div>
-            </div>
-            <div>
-              <button type="submit" name="type" value="totp"
-                      class="button button-outline button-sm">Enroll New Factor</button>
-            </div>
-          </form>
-        </div>
-      </div>
       <div>
-        <h1>List of Current Factors</h1>
+        <div class="flex_column">
+          <div class="flex space_between width_40vw">
+            <div>
+              <h2>Current MFA Factors</h2>
+            </div>
 
+            <div class="flex space-between">
+              <a href="/enroll_factor_details">
+                <button class="button button-outline button-sm">Enroll New Factor</button>
+              </a>
+              <a href="/clear_session">
+                <button class="button button-outline button-sm">Clear Factors</button>
+              </a>
+            </div>
+          </div>
+        </div>
 
           @if(factorList != null)
-          @for(var factor : factorList)
-            <button>${factor.id}</button>
-          @endfor
-          @endif
+            <div class="flex_column">
+              @for(var factor : factorList)
+                <a href="/factor_detail?id=${}">
+                  <button class="button login_button">${factor.toString()}</button>
+                </a>
+              @endfor
+            </divclass>
 
+            @else
+              <div class="mt-20 card width_40vw">
+                <p style="text-align: center; color: gray;">No Current Factors</p>
+              </div>
+          @endif
 
       </div>
     </div>
