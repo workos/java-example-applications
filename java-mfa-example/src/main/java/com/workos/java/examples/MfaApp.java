@@ -4,8 +4,10 @@ import com.workos.WorkOS;
 import com.workos.mfa.MfaApi;
 import com.workos.mfa.MfaApi.EnrollFactorOptions;
 import com.workos.mfa.MfaApi.ChallengeFactorOptions;
+import com.workos.mfa.MfaApi.VerifyFactorOptions;
 import com.workos.mfa.models.Challenge;
 import com.workos.mfa.models.Factor;
+import com.workos.mfa.models.VerifyFactorResponse;
 
 import com.workos.sso.models.ProfileAndToken;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -39,6 +41,7 @@ public class MfaApp {
     app.post("/enroll_factor", this::enroll_factor);
     app.get("/enroll_factor_details", this::enroll_factor_details);
     app.post("/challenge_factor", this::challenge_factor);
+    app.post("/verify_factor", this::verify_factor);
   }
 
 
@@ -50,6 +53,28 @@ public class MfaApp {
     } else {
       ctx.render("home.jte");
     }
+  }
+
+  public void verify_factor(Context ctx) {
+    String code = ctx.formParam("code");
+    String challengeId = ctx.sessionAttribute("currentChallengeId");
+
+    VerifyFactorOptions options = MfaApi.VerifyFactorOptions.builder()
+      .authenticationChallengeId(challengeId)
+      .code(code)
+      .build();
+
+    VerifyFactorResponse response = workos.mfa.verifyFactor(options);
+    Boolean isValid = response.valid;
+    String stringValid = isValid.toString();
+
+    Map<String, Object> jteParams = new HashMap<>();
+    jteParams.put("factorId", response.challenge.id);
+    jteParams.put("createdAt", response.challenge.createdAt);
+    jteParams.put("expiresAt", response.challenge.expiresAt);
+    jteParams.put("valid", stringValid);
+
+    ctx.render("challenge_result.jte", jteParams);
   }
 
   public void challenge_factor(Context ctx) {
@@ -66,6 +91,7 @@ public class MfaApp {
 
     Challenge challenge = workos.mfa.challengeFactor(options);
     System.out.println(challenge);
+    ctx.sessionAttribute("currentChallengeId", challenge.id);
 
     ctx.render ("challenge_factor.jte");
   }

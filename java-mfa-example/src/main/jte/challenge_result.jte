@@ -1,3 +1,8 @@
+@param String factorId
+@param String createdAt
+@param String expiresAt
+@param String valid
+
 <link rel="stylesheet" href="main.css">
 
 <body class="container_success">
@@ -27,22 +32,16 @@
     <div class="logged_in_div_right">
         <div class="flex_column">
             <div class="flex-column">
-                <div>
-                    <form method="POST" action="/verify_factor">
-                        <div class='flex_column'>
-                            <div>
-                                <input type="text" id="code" name="code" class="text_input"
-                                       placeholder="Input Auth Code">
-                            </div>
-                            <div>
-                                <button type="submit" class="button">Verify Factor</button>
-                            </div>
-                        </div>
-                    </form>
+                <div class="card">
+                    <h1>User Verified: ${valid}</h1>
+                    <p>Factor ID: ${factorId}</p>
+                    <p>Created At: ${createdAt}</p>
+
+                    <p>Expires At: ${expiresAt}</p>
 
                 </div>
             </div>
-
+            <a href="/"><button class='button'>Go Back Home</button></a>
         </div>
 
     </div>
