@@ -3,6 +3,8 @@ package com.workos.java.examples;
 import com.workos.WorkOS;
 import com.workos.mfa.MfaApi;
 import com.workos.mfa.MfaApi.EnrollFactorOptions;
+import com.workos.mfa.MfaApi.ChallengeFactorOptions;
+import com.workos.mfa.models.Challenge;
 import com.workos.mfa.models.Factor;
 
 import com.workos.sso.models.ProfileAndToken;
@@ -36,23 +38,51 @@ public class MfaApp {
     app.get("factor_detail", this::factor_detail);
     app.post("/enroll_factor", this::enroll_factor);
     app.get("/enroll_factor_details", this::enroll_factor_details);
+    app.post("/challenge_factor", this::challenge_factor);
   }
 
 
   public void home(Context ctx) {
     if(ctx.sessionAttribute("arrayFactorList") != null) {
-
-      System.out.println(ctx.sessionAttributeMap());
+      ArrayList<String> factorIdList = ctx.sessionAttribute("factorIdList");
       ArrayList<Object> factorList = ctx.sessionAttribute("arrayFactorList");
-      System.out.println(factorList);
-      ctx.render("home.jte", Collections.singletonMap("factorList", factorList));
+      ctx.render("home.jte", Collections.singletonMap("factorIdList", factorIdList));
     } else {
       ctx.render("home.jte");
     }
   }
 
+  public void challenge_factor(Context ctx) {
+    String smsCode = ctx.formParam("sms_message");
+    String currentFactorId = ctx.sessionAttribute("currentFactorId");
+    System.out.println(smsCode);
+    System.out.println(currentFactorId);
+
+    ChallengeFactorOptions options = MfaApi.ChallengeFactorOptions.builder()
+      .authenticationFactorId(currentFactorId)
+      .smsTemplate(smsCode)
+      .build();
+    System.out.println(options);
+
+    Challenge challenge = workos.mfa.challengeFactor(options);
+    System.out.println(challenge);
+
+    ctx.render ("challenge_factor.jte");
+  }
+
   public void factor_detail(Context ctx) {
-    ctx.render("factor_detail.jte");
+    String factorId = ctx.queryParam("id");
+    HashMap<String, Factor> currentFactors = ctx.sessionAttribute("factorList");
+    Factor currentFactor = currentFactors.get(factorId);
+    ctx.sessionAttribute("currentFactorId", factorId);
+
+    Map<String, Object> jteParams = new HashMap<>();
+    jteParams.put("factorId", currentFactor.id);
+    jteParams.put("createdAt", currentFactor.createdAt);
+    jteParams.put("type", currentFactor.type);
+    jteParams.put("phoneNumber", currentFactor.sms.phoneNumber);
+
+    ctx.render("factor_detail.jte", jteParams);
   }
 
   public void enroll_factor_details(Context ctx ) {
@@ -66,28 +96,31 @@ public class MfaApp {
       .phoneNumber(phoneNumber)
       .build();
     Factor factor = workos.mfa.enrollFactor(options);
+    String factorId = factor.id;
 
     if(ctx.sessionAttribute("factorList") != null) {
-      System.out.print("hit not-null part");
-      Map<String, Object> factorList = ctx.sessionAttribute("factorList");
-      factorList.put(String.valueOf(factorList.size()), factor);
+      ArrayList<String> factorIdList = ctx.sessionAttribute("factorIdList");
+      factorIdList.add(factorId);
+      ctx.sessionAttribute("factorIdList", factorIdList);
+
+      HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
+      factorList.put(factorId, factor);
       ctx.sessionAttribute("factorList", factorList);
     } else {
-      System.out.print("hit null part");
-      Map<String, Object> factorList = new HashMap<>();
-      factorList.put(String.valueOf(factorList.size()), factor);
+      ArrayList<String> factorIdList = new ArrayList<>();
+      factorIdList.add(factorId);
+      ctx.sessionAttribute("factorIdList", factorIdList);
+
+      HashMap<String, Factor> factorList = new HashMap<>();
+      factorList.put(factorId, factor);
       ctx.sessionAttribute("factorList", factorList);
     }
 
-    Map<String, Factor> factorList = ctx.sessionAttribute("factorList");
+    HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
     ArrayList<Object> list = new ArrayList<Object>(factorList.values());
     ctx.sessionAttribute("arrayFactorList", list);
 
-    System.out.println("arrayFactorList before render");
-    System.out.println(list);
-
     ctx.redirect("/");
-//    ctx.render("home.jte", Collections.singletonMap("factorList", list));
   }
 
 

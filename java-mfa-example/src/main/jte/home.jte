@@ -1,4 +1,4 @@
-@param java.util.ArrayList<Object> factorList
+@param java.util.ArrayList<String> factorIdList
 
 <link rel="stylesheet" href="main.css">
 
@@ -47,11 +47,11 @@
           </div>
         </div>
 
-          @if(factorList != null)
+          @if(factorIdList != null)
             <div class="flex_column">
-              @for(var factor : factorList)
-                <a href="/factor_detail?id=${}">
-                  <button class="button login_button">${factor.toString()}</button>
+              @for(var factor : factorIdList)
+                <a href="/factor_detail?id=${factor}">
+                  <button class="button login_button">${factor}</button>
                 </a>
               @endfor
             </divclass>
@@ -69,3 +69,4 @@
 </div>
 
 </body>
+

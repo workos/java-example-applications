@@ -1,8 +1,11 @@
-<html>
+@param String factorId
+@param String type
+@param String phoneNumber
+@param String createdAt
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='login.css')}}">
-</head>
+
+
+<link rel="stylesheet" href="main.css">
 
 <body class="container_success">
 <div class="logged_in_nav">
@@ -32,37 +35,37 @@
         <div class="flex_column">
             <div class="flex">
                 <div class="flex-column">
-<%--                    <div>--%>
-<%--                        <h2>ID: {{factor['id']}}</h2>--%>
-<%--                    </div>--%>
-<%--                    <div>--%>
-<%--                        <p>Type: <code>{{factor['type']}}</code></p>--%>
-<%--                        <p>Environment: <code>{{factor['environment_id']}}</code></p>--%>
-<%--                        <p>Phone Number: <code>{{phone_number}}</code></p>--%>
-<%--                        <p>Created At: <code>{{factor['created_at']}}</code></p>--%>
-<%--                        <p>Updated At: <code>{{factor['updated_at']}}</code></p>--%>
-<%--                    </div>--%>
+                    <div>
+                        <h2>ID: ${factorId}</h2>
+                    </div>
+                    <div>
+                        <p>Type: <code>${type}</code></p>
+                        <p>Phone Number: <code>${phoneNumber}</code></p>
+                        <p>Created At: <code>${createdAt}</code></p>
+                    </div>
                 </div>
-<%--                {% if factor['type'] == 'totp' %}--%>
+<%--                @if(type == "totp")--%>
 <%--                <div class="qr_div">--%>
-<%--                    <img class="qr_code" src="{{qr_code}}" alt="qr_code">--%>
+<%--                    <img class="qr_code" src=${qrCode} alt="qr_code">--%>
 <%--                </div>--%>
+<%--                @endif@--%>
 
-<%--                {% endif %}--%>
             </div>
 
             <div class="flex-column">
                 <div>
-                    <form method="POST" action="{{ url_for('challenge_factor') }}">
+                    <form method="POST" action="/challenge_factor">
                         <div class='flex_column'>
-                            {% if factor['type'] == 'sms' %}
-                            <div>
-                                <input type="text" id="sms_message" name="sms_message" class="text_input"
-                                       placeholder="Custom SMS Message Input {{code}}">
-                            </div>
-                            {% endif %}
+                            @if(type != "totp")
+                                <div>
+                                    <input type="text" id="sms_message" name="sms_message" class="text_input"
+                                           placeholder="Custom SMS Message Input {{code}}">
+                                </div>
+                            @endif
+
                             <div>
                                 <button type="submit" class="button">Challenge Factor</button>
+                                <a href="/" class="button">Home</a>
                             </div>
                         </div>
                     </form>
@@ -75,5 +78,3 @@
     </div>
 </div>
 </body>
-
-</html>

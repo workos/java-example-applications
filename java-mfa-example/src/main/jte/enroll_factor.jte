@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="main.css">
 
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='login.css')}}">
+    <link rel="stylesheet" href="main.css">
 </head>
 
 <body class="container_success">
