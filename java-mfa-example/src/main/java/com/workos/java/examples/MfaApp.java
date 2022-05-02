@@ -137,7 +137,7 @@ public class MfaApp {
         options = EnrollFactorOptions.builder()
           .build();
     }
-
+    System.out.println(options.getClass());
     System.out.println(options.getType());
     System.out.println(options.getUser());
     System.out.println(options.getIssuer());
@@ -173,36 +173,9 @@ public class MfaApp {
       ctx.redirect("/");
     } catch (Exception e) {
       System.out.println(e);
+      System.out.println(e.getMessage());
     }
-
-//    Factor factor = workos.mfa.enrollFactor(options);
-//    String factorId = factor.id;
-//
-//    System.out.println(factor);
-//
-//    if(ctx.sessionAttribute("factorList") != null) {
-//      ArrayList<String> factorIdList = ctx.sessionAttribute("factorIdList");
-//      factorIdList.add(factorId);
-//      ctx.sessionAttribute("factorIdList", factorIdList);
-//
-//      HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
-//      factorList.put(factorId, factor);
-//      ctx.sessionAttribute("factorList", factorList);
-//    } else {
-//      ArrayList<String> factorIdList = new ArrayList<>();
-//      factorIdList.add(factorId);
-//      ctx.sessionAttribute("factorIdList", factorIdList);
-//
-//      HashMap<String, Factor> factorList = new HashMap<>();
-//      factorList.put(factorId, factor);
-//      ctx.sessionAttribute("factorList", factorList);
-//    }
-//
-//    HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
-//    ArrayList<Object> list = new ArrayList<Object>(factorList.values());
-//    ctx.sessionAttribute("arrayFactorList", list);
-//
-//    ctx.redirect("/");
+    
   }
 
 
