@@ -8,13 +8,10 @@ import com.workos.mfa.MfaApi.VerifyFactorOptions;
 import com.workos.mfa.models.Challenge;
 import com.workos.mfa.models.Factor;
 import com.workos.mfa.models.VerifyFactorResponse;
-
-import com.workos.sso.models.ProfileAndToken;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -117,42 +114,103 @@ public class MfaApp {
 
   public void enroll_factor(Context ctx) {
     String phoneNumber = ctx.formParam("phone_number");
-    EnrollFactorOptions options = MfaApi.EnrollFactorOptions.builder()
-      .type("sms")
-      .phoneNumber(phoneNumber)
-      .build();
-    Factor factor = workos.mfa.enrollFactor(options);
-    String factorId = factor.id;
+    String factorType = ctx.formParam("type");
+    String issuer = ctx.formParam("totp_issuer");
+    String user = ctx.formParam("totp_user");
+    EnrollFactorOptions options;
 
-    if(ctx.sessionAttribute("factorList") != null) {
-      ArrayList<String> factorIdList = ctx.sessionAttribute("factorIdList");
-      factorIdList.add(factorId);
-      ctx.sessionAttribute("factorIdList", factorIdList);
-
-      HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
-      factorList.put(factorId, factor);
-      ctx.sessionAttribute("factorList", factorList);
-    } else {
-      ArrayList<String> factorIdList = new ArrayList<>();
-      factorIdList.add(factorId);
-      ctx.sessionAttribute("factorIdList", factorIdList);
-
-      HashMap<String, Factor> factorList = new HashMap<>();
-      factorList.put(factorId, factor);
-      ctx.sessionAttribute("factorList", factorList);
+    switch(factorType) {
+      case "sms":
+        options = EnrollFactorOptions.builder()
+          .type("sms")
+          .phoneNumber(phoneNumber)
+          .build();
+          break;
+      case "totp":
+        options = EnrollFactorOptions.builder()
+          .type("totp")
+          .issuer(issuer)
+          .user(user)
+          .build();
+          break;
+      default:
+        options = EnrollFactorOptions.builder()
+          .build();
     }
 
-    HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
-    ArrayList<Object> list = new ArrayList<Object>(factorList.values());
-    ctx.sessionAttribute("arrayFactorList", list);
+    System.out.println(options.getType());
+    System.out.println(options.getUser());
+    System.out.println(options.getIssuer());
 
-    ctx.redirect("/");
+    try {
+      Factor factor = workos.mfa.enrollFactor(options);
+      String factorId = factor.id;
+
+      System.out.println(factor);
+
+      if(ctx.sessionAttribute("factorList") != null) {
+        ArrayList<String> factorIdList = ctx.sessionAttribute("factorIdList");
+        factorIdList.add(factorId);
+        ctx.sessionAttribute("factorIdList", factorIdList);
+
+        HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
+        factorList.put(factorId, factor);
+        ctx.sessionAttribute("factorList", factorList);
+      } else {
+        ArrayList<String> factorIdList = new ArrayList<>();
+        factorIdList.add(factorId);
+        ctx.sessionAttribute("factorIdList", factorIdList);
+
+        HashMap<String, Factor> factorList = new HashMap<>();
+        factorList.put(factorId, factor);
+        ctx.sessionAttribute("factorList", factorList);
+      }
+
+      HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
+      ArrayList<Object> list = new ArrayList<Object>(factorList.values());
+      ctx.sessionAttribute("arrayFactorList", list);
+
+      ctx.redirect("/");
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+
+//    Factor factor = workos.mfa.enrollFactor(options);
+//    String factorId = factor.id;
+//
+//    System.out.println(factor);
+//
+//    if(ctx.sessionAttribute("factorList") != null) {
+//      ArrayList<String> factorIdList = ctx.sessionAttribute("factorIdList");
+//      factorIdList.add(factorId);
+//      ctx.sessionAttribute("factorIdList", factorIdList);
+//
+//      HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
+//      factorList.put(factorId, factor);
+//      ctx.sessionAttribute("factorList", factorList);
+//    } else {
+//      ArrayList<String> factorIdList = new ArrayList<>();
+//      factorIdList.add(factorId);
+//      ctx.sessionAttribute("factorIdList", factorIdList);
+//
+//      HashMap<String, Factor> factorList = new HashMap<>();
+//      factorList.put(factorId, factor);
+//      ctx.sessionAttribute("factorList", factorList);
+//    }
+//
+//    HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
+//    ArrayList<Object> list = new ArrayList<Object>(factorList.values());
+//    ctx.sessionAttribute("arrayFactorList", list);
+//
+//    ctx.redirect("/");
   }
 
 
   public void clear_session(Context ctx ) {
     ctx.sessionAttribute("factorList", null);
     ctx.sessionAttribute("arrayFactorList", null);
+    ctx.sessionAttribute("factorIdList", null);
+    ctx.sessionAttribute("currentFactorType", null);
     ctx.redirect("/");
   }
 
