@@ -2,6 +2,7 @@
 @param String createdAt
 @param String expiresAt
 @param String valid
+@param String type
 
 <link rel="stylesheet" href="main.css">
 
@@ -36,9 +37,9 @@
                     <h1>User Verified: ${valid}</h1>
                     <p>Factor ID: ${factorId}</p>
                     <p>Created At: ${createdAt}</p>
-
-                    <p>Expires At: ${expiresAt}</p>
-
+                    @if(type.equals("sms"))
+                        <p>Expires At: ${expiresAt}</p>
+                    @endif
                 </div>
             </div>
             <a href="/"><button class='button'>Go Back Home</button></a>

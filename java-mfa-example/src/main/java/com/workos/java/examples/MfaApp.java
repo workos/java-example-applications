@@ -1,5 +1,4 @@
 package com.workos.java.examples;
-
 import com.workos.WorkOS;
 import com.workos.mfa.MfaApi;
 import com.workos.mfa.MfaApi.EnrollFactorOptions;
@@ -33,8 +32,8 @@ public class MfaApp {
     clientId = env.get("WORKOS_CLIENT_ID");
 
     app.get("/", this::home);
-    app.get("clear_session", this::clear_session);
-    app.get("factor_detail", this::factor_detail);
+    app.get("/clear_session", this::clear_session);
+    app.get("/factor_detail", this::factor_detail);
     app.post("/enroll_factor", this::enroll_factor);
     app.get("/enroll_factor_details", this::enroll_factor_details);
     app.post("/challenge_factor", this::challenge_factor);
@@ -55,42 +54,69 @@ public class MfaApp {
   public void verify_factor(Context ctx) {
     String code = ctx.formParam("code");
     String challengeId = ctx.sessionAttribute("currentChallengeId");
+    String factorType = ctx.sessionAttribute("currentFactorType");
 
     VerifyFactorOptions options = MfaApi.VerifyFactorOptions.builder()
       .authenticationChallengeId(challengeId)
       .code(code)
       .build();
+    try {
+      VerifyFactorResponse response = workos.mfa.verifyFactor(options);
+      Boolean isValid = response.valid;
+      String stringValid = isValid.toString();
 
-    VerifyFactorResponse response = workos.mfa.verifyFactor(options);
-    Boolean isValid = response.valid;
-    String stringValid = isValid.toString();
+      Map<String, Object> jteParams = new HashMap<>();
+      jteParams.put("factorId", response.challenge.id);
+      jteParams.put("createdAt", response.challenge.createdAt);
+      jteParams.put("expiresAt", response.challenge.expiresAt);
+      jteParams.put("valid", stringValid);
+      jteParams.put("type", factorType);
 
-    Map<String, Object> jteParams = new HashMap<>();
-    jteParams.put("factorId", response.challenge.id);
-    jteParams.put("createdAt", response.challenge.createdAt);
-    jteParams.put("expiresAt", response.challenge.expiresAt);
-    jteParams.put("valid", stringValid);
-
-    ctx.render("challenge_result.jte", jteParams);
+      ctx.render("challenge_result.jte", jteParams);
+    } catch (Exception e) {
+      if(e.equals(null)) {
+        ctx.render("error.jte");
+      }
+      Map<String, Object> jteParams = new HashMap<>();
+      jteParams.put("error", e.getMessage());
+      ctx.render("error.jte", jteParams);
+    }
   }
 
   public void challenge_factor(Context ctx) {
+    String factorType = ctx.formParam("type");
+    ctx.sessionAttribute("currentFactorType", factorType);
     String smsCode = ctx.formParam("sms_message");
     String currentFactorId = ctx.sessionAttribute("currentFactorId");
-    System.out.println(smsCode);
-    System.out.println(currentFactorId);
 
-    ChallengeFactorOptions options = MfaApi.ChallengeFactorOptions.builder()
-      .authenticationFactorId(currentFactorId)
-      .smsTemplate(smsCode)
-      .build();
-    System.out.println(options);
+    if(factorType.equals("sms")) {
+      ChallengeFactorOptions options = MfaApi.ChallengeFactorOptions.builder()
+        .authenticationFactorId(currentFactorId)
+        .smsTemplate(smsCode)
+        .build();
+      Challenge challenge = workos.mfa.challengeFactor(options);
+      ctx.sessionAttribute("currentChallengeId", challenge.id);
 
-    Challenge challenge = workos.mfa.challengeFactor(options);
-    System.out.println(challenge);
-    ctx.sessionAttribute("currentChallengeId", challenge.id);
+      ctx.render ("challenge_factor.jte");
+    }
 
-    ctx.render ("challenge_factor.jte");
+    if(factorType.equals("totp")) {
+      ChallengeFactorOptions options = MfaApi.ChallengeFactorOptions.builder()
+        .authenticationFactorId(currentFactorId)
+        .build();
+      try {
+        Challenge challenge = workos.mfa.challengeFactor(options);
+        ctx.sessionAttribute("currentChallengeId", challenge.id);
+      } catch (Exception e) {
+        if(e.equals(null)) {
+          ctx.render("error.jte");
+        }
+        Map<String, Object> jteParams = new HashMap<>();
+        jteParams.put("error", e.getMessage());
+        ctx.render("error.jte", jteParams);
+      }
+      ctx.render ("challenge_factor.jte");
+    }
   }
 
   public void factor_detail(Context ctx) {
@@ -103,7 +129,27 @@ public class MfaApp {
     jteParams.put("factorId", currentFactor.id);
     jteParams.put("createdAt", currentFactor.createdAt);
     jteParams.put("type", currentFactor.type);
-    jteParams.put("phoneNumber", currentFactor.sms.phoneNumber);
+
+    switch(currentFactor.type) {
+      case "sms":
+        jteParams.put("phoneNumber", currentFactor.sms.phoneNumber);
+        jteParams.put("factorId", currentFactor.id);
+        jteParams.put("createdAt", currentFactor.createdAt);
+        jteParams.put("type", currentFactor.type);
+        break;
+     case "totp":
+        jteParams.put("factorId", currentFactor.id);
+        jteParams.put("createdAt", currentFactor.createdAt);
+        jteParams.put("type", currentFactor.type);
+        jteParams.put("qrCode", currentFactor.totp.qrCode);
+        break;
+    default:
+      String error = "Invalid type";
+      String errorMessage = "Type must be either 'sms' or 'totp'";
+      jteParams.put("error", error);
+      jteParams.put("errorMessage", errorMessage);
+      ctx.render("error.jte", jteParams);
+    }
 
     ctx.render("factor_detail.jte", jteParams);
   }
@@ -137,22 +183,15 @@ public class MfaApp {
         options = EnrollFactorOptions.builder()
           .build();
     }
-    System.out.println(options.getClass());
-    System.out.println(options.getType());
-    System.out.println(options.getUser());
-    System.out.println(options.getIssuer());
 
     try {
       Factor factor = workos.mfa.enrollFactor(options);
       String factorId = factor.id;
 
-      System.out.println(factor);
-
       if(ctx.sessionAttribute("factorList") != null) {
         ArrayList<String> factorIdList = ctx.sessionAttribute("factorIdList");
         factorIdList.add(factorId);
         ctx.sessionAttribute("factorIdList", factorIdList);
-
         HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
         factorList.put(factorId, factor);
         ctx.sessionAttribute("factorList", factorList);
@@ -160,30 +199,32 @@ public class MfaApp {
         ArrayList<String> factorIdList = new ArrayList<>();
         factorIdList.add(factorId);
         ctx.sessionAttribute("factorIdList", factorIdList);
-
         HashMap<String, Factor> factorList = new HashMap<>();
         factorList.put(factorId, factor);
         ctx.sessionAttribute("factorList", factorList);
       }
-
       HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
       ArrayList<Object> list = new ArrayList<Object>(factorList.values());
       ctx.sessionAttribute("arrayFactorList", list);
-
       ctx.redirect("/");
     } catch (Exception e) {
-      System.out.println(e);
-      System.out.println(e.getMessage());
+      if(e.equals(null)) {
+        ctx.render("error.jte");
+      }
+      Map<String, Object> jteParams = new HashMap<>();
+      jteParams.put("error", e.getMessage());
+      ctx.render("error.jte", jteParams);
     }
-    
   }
-
 
   public void clear_session(Context ctx ) {
     ctx.sessionAttribute("factorList", null);
     ctx.sessionAttribute("arrayFactorList", null);
     ctx.sessionAttribute("factorIdList", null);
     ctx.sessionAttribute("currentFactorType", null);
+    ctx.sessionAttribute("currentChallengeId", null);
+    ctx.sessionAttribute("currentFactorId", null);
+    ctx.sessionAttribute("currentFactor", null);
     ctx.redirect("/");
   }
 

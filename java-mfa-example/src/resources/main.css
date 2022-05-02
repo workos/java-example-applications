@@ -62,6 +62,10 @@ body {
     margin-top: 20px !important;
 }
 
+.mt-50 {
+    margin-top: 50px !important;
+}
+
 .container_success {
     display: flex;
     flex-direction: column;
@@ -236,7 +240,8 @@ div.text_box {
 
 .qr_div {
     align-self: center;
-    padding-top: 15px;
+    padding-top: 70px;
+    padding-bottom: 25px;
 }
 
 .qr_code {

@@ -2,6 +2,7 @@
 @param String type
 @param String phoneNumber
 @param String createdAt
+@param String qrCode
 
 
 
@@ -40,15 +41,17 @@
                     </div>
                     <div>
                         <p>Type: <code>${type}</code></p>
-                        <p>Phone Number: <code>${phoneNumber}</code></p>
+                        @if(type.equals("sms"))
+                            <p>Phone Number: <code>${phoneNumber}</code></p>
+                        @endif
                         <p>Created At: <code>${createdAt}</code></p>
                     </div>
                 </div>
-<%--                @if(type == "totp")--%>
-<%--                <div class="qr_div">--%>
-<%--                    <img class="qr_code" src=${qrCode} alt="qr_code">--%>
-<%--                </div>--%>
-<%--                @endif@--%>
+                @if(type.equals("totp"))
+                    <div class="qr_div">
+                      <img class="qr_code" src="${qrCode}" alt="qr_code">
+                    </div>
+                @endif
 
             </div>
 
@@ -56,15 +59,16 @@
                 <div>
                     <form method="POST" action="/challenge_factor">
                         <div class='flex_column'>
-                            @if(type != "totp")
+                            @if(type.equals("sms"))
                                 <div>
                                     <input type="text" id="sms_message" name="sms_message" class="text_input"
                                            placeholder="Custom SMS Message Input {{code}}">
+                                    <input hidden type="text" id="factorId" name="factorId" value="${factorId}">
                                 </div>
                             @endif
 
                             <div>
-                                <button type="submit" class="button">Challenge Factor</button>
+                                <button type="submit" class="button" name="type" value="${type}">Challenge Factor</button>
                                 <a href="/" class="button">Home</a>
                             </div>
                         </div>
