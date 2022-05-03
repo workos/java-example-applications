@@ -1,6 +1,4 @@
-If your SaaS product’s backend is built with Java—or a JVM-compatible language such as Kotlin, Groovy, Scala, or Clojure—and you want to incorporate WorkOS’ Admin Portal functionality, you can do a dry-run of the Admin Portal integration using this example Java app. It makes use of the [WorkOS Kotlin SDK](https://github.com/workos-inc/workos-kotlin).
-
-If you get stuck while following the steps below and aren't able to resolve the issue by reading our [API reference](https://workos.com/docs/reference) or [SSO Setup Guide](https://workos.com/docs/sso/guide), please reach out to us at support@workos.com so we can help!
+If your SaaS product’s backend is built with Java—or a JVM-compatible language such as Kotlin, Groovy, Scala, or Clojure — and you want to incorporate WorkOS’ MFA functionality, you can do a dry-run of the MFA integration using this example Java app. It makes use of the [WorkOS Kotlin SDK](https://github.com/workos-inc/workos-kotlin).
 
 ## Prerequisites
 A free WorkOS account, and each of these installed on your machine:
@@ -48,31 +46,21 @@ WORKOS_CLIENT_ID=your_project_id_here
 ```
 
 The .env file is listed in this repo's .gitignore file, so your sensitive information will not be checked into version control. This is an important consideration for keeping sensitive information such as API keys private. The WorkOS Kotlin SDK will read your API key and Client ID from the .env file.
-    
-## Set up SSO with WorkOS
-7. Create an [Organization](https://dashboard.workos.com/organizations) and an [SSO Connection](https://workos.com/docs/sso/guide/introduction) in the Organization in your WorkOS Dashboard.
-8. Copy the Connection ID from the new connection that you just set up and add it to the same .env file that you created in step 6. The .env file should now look like this: 
-```bash
-WORKOS_API_KEY=your_api_key_here
-WORKOS_CLIENT_ID=your_project_id_here
-WORKOS_CONNECTION_ID=your_connection_id_here
-```
 
-10. Add http://localhost:7001/callback as the default Redirect URI in the Configuration section of the WorkOS Dashboard:
-
-![A screenshot of te default Redirect URI in the WorkOS dashboard](https://assets-global.website-files.com/5f03ef1d331a69193fae6dcd/619d4e48d8ad3f0711f3b1e3_Screen%20Shot%202021-11-23%20at%2012.24.34%20PM.png)
 
 ## Test the integration
-9. Start the server by running this command in the CLI while you’re in the java-example-applications/ directory:
+7. Start the server by running this command in the CLI while you’re in the java-example-applications/ directory:
 ```bash
 $ ./gradlew :java-mfa-example:run
 ```
 
-10. Navigate to http://localhost:7001. Click the “Login” button. You’ll be prompted to sign in using the identity provider (IdP) you configured during the SSO setup.
+8. Navigate to http://localhost:7001. Click the “Enroll Factor” button. You’ll be prompted to enroll either an "sms" or "totp" type factor.
 
-11. Once you’re signed in, the webpage will display the user information for the logged-in user.
+9. If you enrolling an "sms" factor, be sure to include the literal string "{{code}}" in the message. This tells the WorkOS API to generate and include a random auth code in sms message.  
 
-Nice work! You just set up SSO for your Java app!
+10. After the factor is created, click on the factor and follow the prompts to challenge and verify the factor.
+
+Nice work! You just set up MFA for your Java app!
 
 ## Need help?
-If you get stuck while following the steps below and aren't able to resolve the issue by reading our [API reference](https://workos.com/docs/reference) or [SSO Setup Guide](https://workos.com/docs/sso/guide), please reach out to us at support@workos.com so we can help!
+If you get stuck while following the steps below and aren't able to resolve the issue by reading our [MFA Setup Guide](https://workos.com/docs/mfa/guide). If you're still having trouble after that please reach out to us at support@workos.com!
