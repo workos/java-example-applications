@@ -9,11 +9,7 @@ dependencies {
 
   implementation("gg.jte:jte:1.12.0")
 
-  if (project.hasProperty("sdkVersion")) {
-    implementation("com.workos:workos:${project.property("sdkVersion")}")
-  } else {
-    implementation("com.workos:workos:2.0.0")
-  }
+  implementation("com.workos:workos:2.1.3")
 
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
 
