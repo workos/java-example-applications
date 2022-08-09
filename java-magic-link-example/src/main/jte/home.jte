@@ -5,20 +5,19 @@
 <body class="container_login">
 <div class='flex_column'>
   <div class="flex heading_div">
-    <img src="images/workos_logo.png" alt="workos logo">
-    <div class="heading_text_div">
-      <div>
-        <h1>WorkOS</h1>
-      </div>
-    </div>
+    <img src="images/workos-logo-with-text.png" alt="workos logo">
   </div>
   <h2 class="bottom_margin_sm">Java Magic Link Example</h2>
   <form action="/send-magic-link" method="post">
-    <div class="mb-3 form-group row">
-      <input class="form-control" id="email" type="email" name="email" aria-describedby="emailHelp" placeholder="Enter Email to receive Magic Link"/>
+    <div class='flex_column'>
+      <div>
+        <input type="text" id="email" name="email" class="text_input">
+      </div>
+      <div>
+        <button type="submit" class="button">Submit Email for Magic Link</button>
+      </div>
     </div>
-    <button type="submit" class="button login_button">Submit</button>
-    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    <div id="emailHelp" class="form-text flex">We'll never share your email with anyone else.</div>
   </form>
 
 </div>

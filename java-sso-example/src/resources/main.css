@@ -245,3 +245,13 @@ div.text_box {
 pre.prettyprint {
     border: none !important;
 }
+
+.text_input {
+    border: 1px solid #555555;
+    border-radius: 10px;
+    margin: 20px 0px 7px 0px;
+    padding: 5px;
+    height: 35px;
+    width: 18vw;
+    text-align: center;
+}
