@@ -6,15 +6,10 @@
 <body class="container_login">
 <div class='flex_column'>
   <div class="flex heading_div">
-    <img src="images/workos_logo.png" alt="workos logo">
-    <div class="heading_text_div">
-      <div>
-        <h1>WorkOS</h1>
-      </div>
-    </div>
+    <img src="images/workos-logo-with-text.png" alt="workos logo">
   </div>
-  <div >
-    <h2>A magic link has been sent to your email: ${email}.</h2>
+  <div class="width-40vw">
+    <h2>A magic link has been sent to your email: <code>${email}</code></h2>
   </div>
 </div>
 </body>
