@@ -1,4 +1,4 @@
-If your SaaS product’s backend is built with Java—or a JVM-compatible language such as Kotlin, Groovy, Scala, or Clojure—and you want to incorporate WorkOS’ Admin Portal functionality, you can do a dry-run of the Admin Portal integration using our [example Java app](https://github.com/workos-inc/java-example-applications/tree/main/java-admin-portal-example). It makes use of the [WorkOS Kotlin SDK](https://github.com/workos-inc/workos-kotlin).
+If your SaaS product’s backend is built with Java—or a JVM-compatible language such as Kotlin, Groovy, Scala, or Clojure—and you want to incorporate WorkOS’ Admin Portal functionality, you can do a dry-run of the Admin Portal integration using our [example Java app](https://github.com/workos/java-example-applications/tree/main/java-admin-portal-example). It makes use of the [WorkOS Kotlin SDK](https://github.com/workos/workos-kotlin).
 
 If you get stuck while following the steps below and aren't able to resolve the issue by reading our [API reference](https://workos.com/docs/reference) or [Admin Portal Setup Guide](https://workos.com/docs/admin-portal/guide), please reach out to us at support@workos.com so we can help!
 
@@ -16,12 +16,12 @@ $ cd ~/Desktop
 2. Clone the main Java example app repo:
 ```bash
 # HTTPS
-$ git clone https://github.com/workos-inc/java-example-applications.git
+$ git clone https://github.com/workos/java-example-applications.git
 
 or
 
 # SSH
-$ git clone git@github.com:workos-inc/java-example-applications.git
+$ git clone git@github.com:workos/java-example-applications.git
 ```
 
 3. Navigate to the cloned repo:
