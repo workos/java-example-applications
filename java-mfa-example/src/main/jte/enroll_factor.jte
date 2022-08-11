@@ -7,25 +7,34 @@
 <body class="container_success">
 <div class="logged_in_nav">
     <div class="flex">
-        <p>MFA Example Application</p>
+        <div>
+            <img src="images/workos-logo-with-text.png" alt="workos logo">
+        </div>
     </div>
     <div>
-        <img src="images/workos_logo.png" alt="workos logo">
+        <a href="https://workos.com/docs" target="_blank"><button class='button nav-item'>Documentation</button></a>
+        <a href="https://workos.com/docs/reference" target="_blank"><button class='button nav-item'>API
+                Reference</button></a>
+        <a href="https://workos.com/blog" target="_blank"><button
+                    class='button nav-item blog-nav-button'>Blog</button></a>
+        <a href="https://workos.com/" target="_blank"><button class='button button-outline'>WorkOS</button></a>
     </div>
 </div>
 <div class='flex'>
     <div class="logged_in_div_left">
-        <div>
+        <div class="title-text">
             <h1>Your app,</h1>
-            <h2>Enterprise Ready</h2>
+            <h2 class="home-hero-gradient">Enterprise Ready</h2>
         </div>
-        <div>
-            <a href="https://workos.com/" target="_blank"><button class='button'>WorkOS</button></a>
-            <a href="https://workos.com/docs" target="_blank"><button class='button'>Documentation</button></a>
-            <a href="https://workos.com/docs/reference" target="_blank"><button class='button'>API
-                    Reference</button></a>
-            <a href="https://workos.com/blog" target="_blank"><button class='button'>Blog</button></a>
-
+        <div class="title-subtext">
+            <p>Start selling to enterprise customers with just a few lines of code.</p>
+            <p>Implement features like single sign-on in minutes instead of months.</p>
+        </div>
+        <div class="flex success-buttons">
+            <a href="https://workos.com/signup" target="_blank"><button class='button'>Get Started</button></a>
+            <a href="mailto:sales@workos.com?subject=WorkOS Sales Inquiry" target="_blank"><button
+                        class='button button-outline sales-button'>Contact
+                    Sales</button></a>
         </div>
     </div>
     <div class="logged_in_div_right">
@@ -34,16 +43,17 @@
                 <div class="factor_card">
                     <h2>Enroll SMS Factor</h2>
                     <form action="/enroll_factor" method="post">
-                        <div class="flex">
+                        <div class="flex flex_column">
                             <div class="flex">
                                 <input class="text_input" type="text" id="phone_number" name="phone_number"
                                        placeholder="Phone Number" required>
                             </div>
-                        </div>
-                        <div>
-                            <button type="submit" name="type" value="sms"
-                                    class="button button-outline button-sm">Enroll New
-                                Factor</button>
+
+                            <div>
+                                <button type="submit" name="type" value="sms"
+                                        class="button button-outline button-sm">Enroll New
+                                    Factor</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -51,7 +61,7 @@
                 <div class="factor_card">
                     <h2>Enroll TOTP Factor</h2>
                     <form method="POST" action="/enroll_factor">
-                        <div class="flex-column">
+                        <div class="flex_column">
                             <div class="flex">
                                 <input class="text_input" type="text" id="totp_issuer" name="totp_issuer"
                                        placeholder="TOTP Issuer" required>
@@ -60,10 +70,11 @@
                                 <input class="text_input" type="text" id="totp_user" name="totp_user"
                                        placeholder="User Email" required>
                             </div>
-                        </div>
-                        <div>
-                            <button type="submit" name="type" value="totp"
-                                    class="button button-outline button-sm">Enroll New Factor</button>
+
+                            <div>
+                                <button type="submit" name="type" value="totp"
+                                        class="button button-outline button-sm">Enroll New Factor</button>
+                            </div>
                         </div>
                     </form>
                 </div>
