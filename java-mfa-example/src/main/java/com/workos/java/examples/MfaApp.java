@@ -14,6 +14,7 @@ import io.javalin.http.staticfiles.Location;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -51,8 +52,17 @@ public class MfaApp {
     }
   }
 
+  public String buildCode(Map<String, List<String>> map) {
+    String code = "";
+    for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+      String thisValue = entry.getValue().get(0);
+      code += thisValue;
+    }
+    return code;
+  }
+
   public void verify_factor(Context ctx) {
-    String code = ctx.formParam("code");
+    String code = buildCode(ctx.formParamMap());
     String challengeId = ctx.sessionAttribute("currentChallengeId");
     String factorType = ctx.sessionAttribute("currentFactorType");
 
