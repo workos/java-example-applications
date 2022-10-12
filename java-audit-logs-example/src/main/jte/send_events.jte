@@ -1,5 +1,5 @@
-@param String org
-
+@param String org_name
+@param String org_id
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <link rel="stylesheet" href="../../../main.css">
@@ -38,24 +38,69 @@
     </div>
   </div>
   <div class="logged_in_div_right">
-    <div class="flex_column directory_container">
-      <div class="container">
-        <h1 style="padding: 40px;">Directory Group</h1>
-<%--        <div class="text_box">--%>
-<%--          @if(hasError)--%>
-<%--            <div class="alert alert-danger" >Error occurred fetching group</div>--%>
-<%--          @endif--%>
-<%--          <pre class="overflow prettyprint">--%>
-<%--          ${directoryGroup}--%>
-<%--        </pre>--%>
-<%--        </div>--%>
-      </div>
-      <div class="flex flex_right directory_container">
-<%--        <div>--%>
-<%--          <a class="button" href="/directories/${directoryId}/groups">Back to Groups</a>--%>
-<%--        </div>--%>
-      </div>
+    <div class="flex flex-start width-40vw">
+      <div><h1>${org_name}</h1></div>
     </div>
+    <div class="flex_column width-40vw ">
+      <div class="flex card width-40vw space-between ">
+        <code class="org-id">${org_id}</code>
+        <a href="/logout"><button class="button">Change Org</button></a>
+      </div>
+      <div class="card width-40vw">
+        <div class="flex space-evenly width-40vw margin-b-25">
+          <div>
+            <div class="button button-outline width-15vw">
+              <a href="https://workos.com/docs/audit-logs" target="_blank"><p>Audit Logs Docs</p></a>
+            </div>
+          </div>
+          <div>
+            <a href="{{ url_for('export_events') }}">
+              <div class="button button-outline width-15vw">
+                <p>Export Events</p>
+              </div>
+            </a>
+          </div>
+        </div>
+        <hr style="height:0.5px;width:100%;">
+        <form action="{{ url_for('send_event') }}" method="POST">
+          <div class="flex margin-y-15">
+            <div>
+              <button class="box" name="event" id="user_signed_in" value="0" type="submit" onclick="showSnackbar()">
+                <div class="flex width-100p">
+                  <p>User Signed In</p>
+                </div>
+              </button>
+              <button class="box" name="event" id="user_logged_out" value="1" type="submit" onclick="showSnackbar()">
+                <div class="flex width-100p">
+                  <p>User Logged Out</p>
+                </div>
+              </button>
+            </div>
+            <div>
+              <button class="box" name="event" id="user_org_deleted" value="2" type="submit" onclick="showSnackbar()">
+                <div class="flex width-100p">
+                  <p>User Organization Deleted</p>
+                </div>
+              </button>
+              <button class="box" name="event" id="user_connection_deleted" value="3" type="submit" onclick="showSnackbar()">
+                <div class="flex width-100p">
+                  <p>User Connection Deleted</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div id="snackbar">Log Event Sent</div>
+    </div>
+  </div>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+<script>
+        function showSnackbar() {
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 500);
+        }
+</script>

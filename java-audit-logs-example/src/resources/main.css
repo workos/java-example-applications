@@ -44,6 +44,7 @@ a:visited {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: row;
 }
 
 .flex-start {
@@ -132,6 +133,10 @@ a:visited {
     transition-duration: 0.4s;
     cursor: pointer;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.button p: {
+    margin: 0px;
 }
 
 .button-outline {
@@ -269,12 +274,12 @@ button.box p {
 }
 
 .title-text {
-    margin-bottom: -50px;
+    margin-bottom: 0px;
 }
 
 .title-subtext {
     color: gray;
-    line-height: 10px;
+    line-height: 16px;
     margin-bottom: 15px;
     font-weight: 200;
 }

@@ -12,6 +12,7 @@ import com.workos.directorysync.models.DirectoryList;
 import com.workos.directorysync.models.DirectoryUserList;
 import com.workos.directorysync.models.Group;
 import com.workos.directorysync.models.User;
+import com.workos.organizations.models.Organization;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -44,17 +45,23 @@ public class AuditLogsApp {
 
   public void setOrg(Context ctx) {
     System.out.println("hit setOrg");
-    String org = ctx.formParam("org");
-    System.out.println(org);
-    ctx.sessionAttribute("org", org);
+    String orgId = ctx.formParam("org");
+    Organization org = workos.organizations.getOrganization(orgId);
+    String orgName = org.name;
+    ctx.sessionAttribute("org_id", orgId);
+    ctx.sessionAttribute("org_name", orgName);
 
     ctx.redirect("/");
   }
 
   public void isLoggedIn(Context ctx) {
     System.out.println("hit isLoggedIn");
-    if (ctx.sessionAttribute("org") != null){
-      ctx.render("send_events.jte", Collections.singletonMap("org", ctx.sessionAttribute("org")));
+    if (ctx.sessionAttribute("org_id") != null){
+      Map<String, Object> jteParams = new HashMap<>();
+      jteParams.put("org_name", ctx.sessionAttribute("org_name"));
+      jteParams.put("org_id", ctx.sessionAttribute("org_id"));
+
+      ctx.render("send_events.jte", jteParams);
     } else {
       System.out.println("hit the else");
       ctx.render("home.jte");
