@@ -1,8 +1,5 @@
-@param com.workos.directorysync.models.DirectoryUserList directoryUsers
-@param String directoryId
-
-!{var before = directoryUsers.listMetadata.before;}
-!{var after = directoryUsers.listMetadata.after;}
+@param String org_name
+@param String org_id
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <link rel="stylesheet" href="../../main.css">
@@ -40,45 +37,42 @@
     </div>
   </div>
   <div class="logged_in_div_right">
-    <div class="flex_column directory_container">
-      <div class="container" style="padding: 40px;">
-        <h3>Directory Users for <code>${directoryId}</code></h3>
-        <table class="table">
-          <tr>
-            <th>Directory User ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>User State</th>
-            <th>Groups</th>
-          </tr>
-          @for(var directoryUser : directoryUsers.data)
-            <tr>
-              <td><a href="/directories/${directoryId}/users/${directoryUser.id}">${directoryUser.id}</a></td>
-              <td>${directoryUser.firstName}</td>
-              <td>${directoryUser.lastName}</td>
-              <td>${directoryUser.state}</td>
-              <td>
-                @for(var group: directoryUser.groups)
-                  <div>${group.name}</div>
-                @endfor
-              </td>
-            </tr>
-          @endfor
-        </table>
-        <div class="flex" style="justify-content: space-between">
-          <div>
-            @if(after != null)
-              <a class="button" href="/directories/${directoryId}/users?after=${after}">Before</a>
-            @endif
-            @if(before != null)
-              <a class="button" href="/directories/${directoryId}/users?before=${before}">Next</a>
-            @endif
-          </div>
-          <div>
-            <a class="button" href="/directories">Back to Directories</a>
-          </div>
-        </div>
+    <div class="flex flex-start width-40vw space-between">
+      <div><h1>${org_name}</h1></div>
+      <div>
+        <code class="org-id">${org_id}</code>
       </div>
     </div>
+    <div class="flex flex-column card width-40vw ">
+      <div class="org-button-div flex space-evenly width-40vw">
+        <a href="/logout"><button class="button width-15vw">Change Org</button></a>
+        <a href="/"><button class="button width-15vw">Go Back</button></a>
+      </div>
+    </div>
+
+    <form action="/get_events" method="POST">
+      <div class="flex card width-40vw">
+        <div class="flex">
+          <button class="box" name="event" id="generate_csv" value="0" type="submit" onclick="showSnackbar()">
+            <div class="flex width-100p">
+              <p>Generate CSV</p>
+            </div>
+          </button>
+          <button class="box" name="event" id="access_csv" value="1" type="submit">
+            <div class="flex width-100p">
+              <p>Access CSV</p>
+            </div>
+          </button>
+        </div>
+      </div>
+    </form>
+    <div id="snackbar">CSV Generated</div>
   </div>
 </div>
+<script>
+        function showSnackbar() {
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 500);
+        }
+</script>

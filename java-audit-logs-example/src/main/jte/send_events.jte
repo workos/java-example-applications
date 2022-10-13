@@ -47,22 +47,22 @@
         <a href="/logout"><button class="button">Change Org</button></a>
       </div>
       <div class="card width-40vw">
-        <div class="flex space-evenly width-40vw margin-b-25">
+        <div class="flex space-evenly ">
           <div>
             <div class="button button-outline width-15vw">
-              <a href="https://workos.com/docs/audit-logs" target="_blank"><p>Audit Logs Docs</p></a>
+              <a href="https://workos.com/docs/audit-logs" target="_blank"><p class="margin-b-0">Audit Logs Docs</p></a>
             </div>
           </div>
           <div>
-            <a href="{{ url_for('export_events') }}">
+            <a href="/export_events">
               <div class="button button-outline width-15vw">
-                <p>Export Events</p>
+                <p class="margin-b-0">Export Events</p>
               </div>
             </a>
           </div>
         </div>
         <hr style="height:0.5px;width:100%;">
-        <form action="{{ url_for('send_event') }}" method="POST">
+        <form action="/send_event" method="POST">
           <div class="flex margin-y-15">
             <div>
               <button class="box" name="event" id="user_signed_in" value="0" type="submit" onclick="showSnackbar()">
