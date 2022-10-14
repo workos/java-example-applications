@@ -44,34 +44,49 @@ public class AuditLogsApp {
 
   public void setOrg(Context ctx) {
     String orgId = ctx.formParam("org");
-    Organization org = workos.organizations.getOrganization(orgId);
-    String orgName = org.name;
-    ctx.sessionAttribute("org_id", orgId);
-    ctx.sessionAttribute("org_name", orgName);
 
-    LocalDateTime now =  LocalDateTime.now();
-    LocalDateTime sameDayLastMonth = now.minusMonths(1);
-    Date dateNow = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
-    Date dateSameDayLastMonth = Date.from(sameDayLastMonth.atZone(ZoneId.systemDefault()).toInstant());
 
-    CreateAuditLogEventOptions options =
-      CreateAuditLogEventOptions.builder()
-        .action("user.organization_set")
-        .occurredAt(new Date())
-        .version(1)
-        .actor("user_id", "user", "Jon Smith", Map.of("role", "admin"))
-        .target("team_id", "team", null, Map.of("extra", "data"))
-        .context("1.1.1.1", "Chrome/104.0.0.0")
-        .metadata(Map.of("extra", "data"))
-        .build();
-    String uniqueID = UUID.randomUUID().toString();
-    CreateAuditLogEventRequestOptions requestOptions =
-      CreateAuditLogEventRequestOptions.builder()
-        .idempotencyKey(uniqueID)
-        .build();
-    workos.auditLogs.createEvent(ctx.sessionAttribute("org_id"), options, requestOptions);
+    try {
+      Organization org = workos.organizations.getOrganization(orgId);
 
-    ctx.redirect("/");
+      String orgName = org.name;
+      ctx.sessionAttribute("org_id", orgId);
+      ctx.sessionAttribute("org_name", orgName);
+
+      LocalDateTime now =  LocalDateTime.now();
+      LocalDateTime sameDayLastMonth = now.minusMonths(1);
+      Date dateNow = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+      Date dateSameDayLastMonth = Date.from(sameDayLastMonth.atZone(ZoneId.systemDefault()).toInstant());
+
+      CreateAuditLogEventOptions options =
+        CreateAuditLogEventOptions.builder()
+          .action("user.organization_set")
+          .occurredAt(new Date())
+          .version(1)
+          .actor("user_id", "user", "Jon Smith", Map.of("role", "admin"))
+          .target("team_id", "team", null, Map.of("extra", "data"))
+          .context("1.1.1.1", "Chrome/104.0.0.0")
+          .metadata(Map.of("extra", "data"))
+          .build();
+      String uniqueID = UUID.randomUUID().toString();
+      CreateAuditLogEventRequestOptions requestOptions =
+        CreateAuditLogEventRequestOptions.builder()
+          .idempotencyKey(uniqueID)
+          .build();
+
+      workos.auditLogs.createEvent(ctx.sessionAttribute("org_id"), options, requestOptions);
+
+      ctx.redirect("/");
+    }
+    catch (Exception e) {
+      System.out.println(e);
+      Map<String, Object> jteParams = new HashMap<>();
+      jteParams.put("error", e.toString());
+
+      ctx.render("error.jte", jteParams);
+    }
+
+
   }
 
   public void isOrgSet(Context ctx) {
