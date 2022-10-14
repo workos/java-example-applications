@@ -9,7 +9,7 @@ dependencies {
 
   implementation("gg.jte:jte:1.12.0")
 
-  implementation("com.workos:workos:2.3.0")
+  implementation("com.workos:workos:2.5.0")
 
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
 
