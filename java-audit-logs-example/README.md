@@ -53,7 +53,7 @@ The .env file is listed in this repo's .gitignore file, so your sensitive inform
 $ ./gradlew :java-audit-logs-example:run
 ```
 
-8. Navigate to http://localhost:7001. Enter the directory ID of the directory for which you wish to capture audit logs. 
+8. Navigate to http://localhost:7001. Enter the directory ID of the organization for which you wish to capture audit logs. 
 
 ## Audit Logs Setup with WorkOS
 
