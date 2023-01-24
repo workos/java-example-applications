@@ -57,6 +57,13 @@
               </button>
             </a>
           </div>
+          <div>
+            <a href="/admin-portal/generateLink?intent=log_streams"
+            ><button class="button dsync_button">
+                Launch Log Streams
+              </button>
+            </a>
+          </div>
         </div>
       </div>
     </div>
