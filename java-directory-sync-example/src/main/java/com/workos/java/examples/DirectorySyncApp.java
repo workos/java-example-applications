@@ -3,10 +3,21 @@ package com.workos.java.examples;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workos.WorkOS;
+import com.workos.common.http.PaginationParams;
+import com.workos.common.http.PaginationParams.PaginationParamsBuilder;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoriesOptions;
-import com.workos.directorysync.DirectorySyncApi.ListDirectoriesOptions.ListDirectoriesOptionsBuilder;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoryGroupOptions;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoryUserOptions;
+import com.workos.organizations.OrganizationsApi.ListOrganizationsOptions;
+
+import com.workos.sso.SsoApi;
+import com.workos.sso.SsoApi.ListConnectionsOptions.ListConnectionsOptionsPaginationParamsBuilder;
+import com.workos.sso.models.Connection;
+import com.workos.sso.models.ConnectionList;
+import com.workos.sso.SsoApi.ListConnectionsOptions;
+
+
+import com.workos.organizations.models.OrganizationList;
 import com.workos.directorysync.models.DirectoryGroupList;
 import com.workos.directorysync.models.DirectoryList;
 import com.workos.directorysync.models.DirectoryUserList;
@@ -18,11 +29,13 @@ import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 public class DirectorySyncApp {
   private final WorkOS workos;
 
   private final ObjectMapper mapper = new ObjectMapper();
+  private ListConnectionsOptions listConnectionsOptions;
 
   public DirectorySyncApp() {
     Dotenv env = Dotenv.configure().directory("../.env").load();
@@ -41,10 +54,11 @@ public class DirectorySyncApp {
     app.get("/directories/{directoryId}/users/{userId}", this::directoryUser);
     app.get("/directories/{directoryId}/groups", this::directoryGroups);
     app.get("/directories/{directoryId}/groups/{groupId}", this::directoryGroup);
+    app.get("/listconnections", this::listConnections);
   }
 
   public void directories(Context ctx) {
-    String organization = ""; // enter the organization id here to filter for a specific organization's directory
+    String organization = "org_01FGM2T96YX19Z4HENZ1AC7848"; // enter the organization id here to filter for a specific organization's directory
     String after = ctx.queryParam("after");
     String before = ctx.queryParam("before");
     String deleteResult = ctx.queryParam("deleteResult");
@@ -73,6 +87,25 @@ public class DirectorySyncApp {
 
     ctx.render("directories.jte", jteParams);
   }
+
+  public void listConnections(Context ctx) {
+    ListConnectionsOptions options = new ListConnectionsOptions();
+    options.put("limit", "1");
+
+    ConnectionList list = workos.sso.listConnections(options);
+    String before = list.listMetadata.before;
+    List orgList = list.data;
+
+    while (before != null) {
+      options.put("before", before);
+      ConnectionList currentPage = workos.sso.listConnections(options);
+      before = currentPage.listMetadata.before;
+      orgList.add(currentPage.data);
+    }
+
+    System.out.println(orgList);
+    ctx.render("home.jte");
+    }
 
   public void deleteDirectory(Context ctx) {
     String directoryId = ctx.pathParam("directoryId");
@@ -188,3 +221,5 @@ public class DirectorySyncApp {
     new DirectorySyncApp();
   }
 }
+
+

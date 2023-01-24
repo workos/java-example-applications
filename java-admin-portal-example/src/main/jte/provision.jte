@@ -39,16 +39,23 @@
         <h2>Which Admin Portal would you like to launch?</h2>
         <div class="flex">
           <div>
-            <a href="/admin-portal/sso"
+            <a href="/admin-portal/generateLink?intent=sso"
             ><button class="button dsync_button">Launch SSO</button></a
             >
           </div>
           <div>
-            <a href="/admin-portal/dsync"
+            <a href="/admin-portal/generateLink?intent=dsync"
             ><button class="button dsync_button">
                 Launch Directory Sync
-              </button></a
-            >
+              </button>
+            </a>
+          </div>
+          <div>
+            <a href="/admin-portal/generateLink?intent=audit_logs"
+            ><button class="button dsync_button">
+                Launch Audit Logs
+              </button>
+            </a>
           </div>
         </div>
       </div>
