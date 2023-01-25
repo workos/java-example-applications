@@ -46,8 +46,10 @@ public class AdminPortalApp {
         break;
       case "dsync":
         intent = Intent.DirectorySync;
+        break;
       case "log_streams":
         intent = Intent.LogStreams;
+        break;
     }
 
     Link url =
