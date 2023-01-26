@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workos.WorkOS;
 import com.workos.common.http.PaginationParams;
 import com.workos.common.http.PaginationParams.PaginationParamsBuilder;
+import com.workos.common.models.ListMetadata;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoriesOptions;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoryGroupOptions;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoryUserOptions;
@@ -31,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
+
 public class DirectorySyncApp {
   private final WorkOS workos;
 
@@ -47,18 +49,17 @@ public class DirectorySyncApp {
 
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
-    app.get("/", ctx -> ctx.render("home.jte"));
+    app.get("/", this::listOrganizations);
     app.get("/directories", this::directories);
     app.get("/directories/delete/{directoryId}", this::deleteDirectory);
     app.get("/directories/{directoryId}/users", this::directoryUsers);
     app.get("/directories/{directoryId}/users/{userId}", this::directoryUser);
     app.get("/directories/{directoryId}/groups", this::directoryGroups);
     app.get("/directories/{directoryId}/groups/{groupId}", this::directoryGroup);
-    app.get("/listconnections", this::listConnections);
   }
 
   public void directories(Context ctx) {
-    String organization = "org_01FGM2T96YX19Z4HENZ1AC7848"; // enter the organization id here to filter for a specific organization's directory
+    String organization = ctx.queryParam("id");
     String after = ctx.queryParam("after");
     String before = ctx.queryParam("before");
     String deleteResult = ctx.queryParam("deleteResult");
@@ -88,23 +89,30 @@ public class DirectorySyncApp {
     ctx.render("directories.jte", jteParams);
   }
 
-  public void listConnections(Context ctx) {
-    ListConnectionsOptions options = new ListConnectionsOptions();
-    options.put("limit", "1");
+  public void listOrganizations(Context ctx) {
+    String after = ctx.queryParam("after");
+    String before = ctx.queryParam("before");
 
-    ConnectionList list = workos.sso.listConnections(options);
-    String before = list.listMetadata.before;
-    List orgList = list.data;
+    List<String> domains = List.of("foo-corp.com");
 
-    while (before != null) {
-      options.put("before", before);
-      ConnectionList currentPage = workos.sso.listConnections(options);
-      before = currentPage.listMetadata.before;
-      orgList.add(currentPage.data);
+    ListOrganizationsOptions options =
+      ListOrganizationsOptions.builder().limit(5).build();
+
+    if (after != null) {
+      options.put("after", after);
     }
 
-    System.out.println(orgList);
-    ctx.render("home.jte");
+    if (before != null) {
+      options.put("before", before);
+    }
+
+    OrganizationList organizationList = workos.organizations.listOrganizations(options);
+    System.out.println(organizationList);
+
+    Map<String, Object> jteParams = new HashMap<>();
+    jteParams.put("organizations", organizationList);
+
+    ctx.render("home.jte", jteParams);
     }
 
   public void deleteDirectory(Context ctx) {
