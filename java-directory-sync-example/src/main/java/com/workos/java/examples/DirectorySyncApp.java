@@ -17,7 +17,6 @@ import com.workos.sso.models.Connection;
 import com.workos.sso.models.ConnectionList;
 import com.workos.sso.SsoApi.ListConnectionsOptions;
 
-
 import com.workos.organizations.models.OrganizationList;
 import com.workos.directorysync.models.DirectoryGroupList;
 import com.workos.directorysync.models.DirectoryList;
@@ -60,6 +59,12 @@ public class DirectorySyncApp {
 
   public void directories(Context ctx) {
     String organization = ctx.queryParam("id");
+    if (ctx.queryParam("id") != null){
+      ctx.sessionAttribute("currentOrganization", organization);
+    } else {
+      organization = ctx.sessionAttribute("currentOrganization");
+    }
+
     String after = ctx.queryParam("after");
     String before = ctx.queryParam("before");
     String deleteResult = ctx.queryParam("deleteResult");
@@ -126,7 +131,7 @@ public class DirectorySyncApp {
       deleteResult = "failed";
     }
 
-    ctx.redirect("/directories?deleteResult=" + deleteResult);
+    ctx.redirect("/directories?deleteResult=" + deleteResult + "&&id=" + ctx.sessionAttribute("currentOrganization"));
   }
 
   public void directoryUsers(Context ctx) {

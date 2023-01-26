@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="main.css">
 
 <body>
-<div class="logged_in_nav">
+<div class="logged_in_nav_home">
   <div class="flex space-between width-100vw">
     <div><p>Java Directory Sync Example App</p></div>
     <div class="flex">
@@ -49,7 +49,9 @@
           <tr>
             <td>${organization.name}</td>
             <td>${organization.id}</td>
-            <td><a class="button button-outline" href="/directories?id=${organization.id}">fart</a></td>
+            <td><a class="icon-button" href="/directories?id=${organization.id}">
+                <img class="org-icon" src="/images/icon-settings.svg" alt="link to workos.com">
+              </a></td>
           </tr>
         @endfor
 
