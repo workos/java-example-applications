@@ -6,13 +6,16 @@ import com.workos.auditlogs.AuditLogsApi.CreateAuditLogEventOptions;
 import com.workos.auditlogs.AuditLogsApi.CreateAuditLogEventRequestOptions;
 import com.workos.auditlogs.AuditLogsApi.CreateAuditLogExportOptions;
 import com.workos.auditlogs.models.AuditLogExport;
+import com.workos.organizations.OrganizationsApi.ListOrganizationsOptions;
 import com.workos.organizations.models.Organization;
+import com.workos.organizations.models.OrganizationList;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Collections;
 import java.util.ArrayList;
@@ -34,17 +37,42 @@ public class AuditLogsApp {
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
     clientId = env.get("WORKOS_CLIENT_ID");
 
-    app.get("/", this::isOrgSet);
-    app.post("/set_org", this::setOrg);
-    app.post("/send_event", this::sendEvent);
+    app.get("/", this::home);
+    app.get("/set_org", this::setOrg);
+    app.get("/send_event", this::sendEvent);
     app.get("/export_events", this::exportEvents);
     app.post("/get_events", this::getEvents);
     app.get("logout", this::logout);
   }
 
-  public void setOrg(Context ctx) {
-    String orgId = ctx.formParam("org");
+  public void home(Context ctx) {
+    String after = ctx.queryParam("after");
+    String before = ctx.queryParam("before");
 
+    List<String> domains = List.of("foo-corp.com");
+
+    ListOrganizationsOptions options =
+      ListOrganizationsOptions.builder().limit(5).build();
+
+    if (after != null) {
+      options.put("after", after);
+    }
+
+    if (before != null) {
+      options.put("before", before);
+    }
+
+    OrganizationList organizationList = workos.organizations.listOrganizations(options);
+    System.out.println(organizationList);
+
+    Map<String, Object> jteParams = new HashMap<>();
+    jteParams.put("organizations", organizationList);
+
+    ctx.render("home.jte", jteParams);
+  }
+
+  public void setOrg(Context ctx) {
+    String orgId = ctx.queryParam("id");
 
     try {
       Organization org = workos.organizations.getOrganization(orgId);
@@ -76,7 +104,7 @@ public class AuditLogsApp {
 
       workos.auditLogs.createEvent(ctx.sessionAttribute("org_id"), options, requestOptions);
 
-      ctx.redirect("/");
+      ctx.redirect("/send_event");
     }
     catch (Exception e) {
       System.out.println(e);
@@ -85,24 +113,11 @@ public class AuditLogsApp {
 
       ctx.render("error.jte", jteParams);
     }
-
-
   }
 
-  public void isOrgSet(Context ctx) {
-    if (ctx.sessionAttribute("org_id") != null){
-      Map<String, Object> jteParams = new HashMap<>();
-      jteParams.put("org_name", ctx.sessionAttribute("org_name"));
-      jteParams.put("org_id", ctx.sessionAttribute("org_id"));
-
-      ctx.render("send_events.jte", jteParams);
-    } else {
-      ctx.render("home.jte");
-    }
-  }
 
   public void sendEvent(Context ctx) {
-    String eventType = ctx.formParam("event");
+    String eventType = "0";
     ArrayList<String> events = new ArrayList<String>();
     events.add("user.signed_in");
     events.add("user.logged_out");
@@ -126,7 +141,7 @@ public class AuditLogsApp {
         .build();
     workos.auditLogs.createEvent(ctx.sessionAttribute("org_id"), options, requestOptions);
 
-    ctx.redirect("/");
+    ctx.render("send_events.jte");
   }
 
   public void exportEvents(Context ctx) {
