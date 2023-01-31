@@ -15,9 +15,7 @@ import java.util.Map;
 public class MagicLinkApp {
 
   private final WorkOS workos;
-
   private final String redirectUrl = "/callback";
-
   private final String clientId;
 
   public MagicLinkApp() {

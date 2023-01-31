@@ -1,22 +1,12 @@
 package com.workos.java.examples;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workos.WorkOS;
-import com.workos.common.http.PaginationParams;
-import com.workos.common.http.PaginationParams.PaginationParamsBuilder;
-import com.workos.common.models.ListMetadata;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoriesOptions;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoryGroupOptions;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoryUserOptions;
 import com.workos.organizations.OrganizationsApi.ListOrganizationsOptions;
-
-import com.workos.sso.SsoApi;
-import com.workos.sso.SsoApi.ListConnectionsOptions.ListConnectionsOptionsPaginationParamsBuilder;
-import com.workos.sso.models.Connection;
-import com.workos.sso.models.ConnectionList;
 import com.workos.sso.SsoApi.ListConnectionsOptions;
-
 import com.workos.organizations.models.OrganizationList;
 import com.workos.directorysync.models.DirectoryGroupList;
 import com.workos.directorysync.models.DirectoryList;
@@ -36,7 +26,6 @@ public class DirectorySyncApp {
   private final WorkOS workos;
 
   private final ObjectMapper mapper = new ObjectMapper();
-  private ListConnectionsOptions listConnectionsOptions;
 
   public DirectorySyncApp() {
     Dotenv env = Dotenv.configure().directory("../.env").load();
@@ -112,7 +101,6 @@ public class DirectorySyncApp {
     }
 
     OrganizationList organizationList = workos.organizations.listOrganizations(options);
-    System.out.println(organizationList);
 
     Map<String, Object> jteParams = new HashMap<>();
     jteParams.put("organizations", organizationList);
