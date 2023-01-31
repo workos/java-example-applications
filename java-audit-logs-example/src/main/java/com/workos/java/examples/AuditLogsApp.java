@@ -4,6 +4,7 @@ import com.workos.auditlogs.AuditLogsApi.CreateAuditLogEventOptions;
 import com.workos.auditlogs.AuditLogsApi.CreateAuditLogEventRequestOptions;
 import com.workos.auditlogs.AuditLogsApi.CreateAuditLogExportOptions;
 import com.workos.auditlogs.models.AuditLogExport;
+import com.workos.common.models.Order;
 import com.workos.organizations.OrganizationsApi.ListOrganizationsOptions;
 import com.workos.organizations.models.Organization;
 import com.workos.organizations.models.OrganizationList;
