@@ -9,11 +9,10 @@
 <div class="logged_in_div_left flex_column">
   <div class="flex logged_in_div_left_title">
     <div class="flex-column">
-      <div class="flex space-between">
+      <div class="flex space-between width-11vw">
         <div><h2>Audit Logs</h2></div>
-        <div><img class="org-icon" src="/images/icon-settings.svg" alt="settings icon"></div>
       </div>
-      <div><p class="sub-heading">Python Flask Example App</p></div>
+      <div><p class="sub-heading">Java Example App</p></div>
     </div>
   </div>
   <hr style="height:0.5px;width:75%;">
@@ -27,7 +26,7 @@
       </div>
     </a>
     <div id="myBtn" class="flex sidebar-button">
-      <div><img class="org-icon" src="/images/icon-settings.svg" alt="settings icon"></div>
+      <div><img class="org-icon" src="/images/icon-document.svg" alt="audit logs icon"></div>
       <div>
         <p>Audit Logs</p>
       </div>

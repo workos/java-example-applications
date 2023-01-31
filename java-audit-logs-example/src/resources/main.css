@@ -16,6 +16,16 @@ a:visited {
   color: inherit;
 }
 
+h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+
 .container_login {
   display: flex;
   flex-direction: column;
@@ -45,7 +55,12 @@ a:visited {
 
 .directory-card {
   position: relative;
-  top: 15vh;
+  top: 5vh;
+}
+
+.audit-logs-card {
+position: relative;
+top: 3vh;
 }
 
 .events-card {
@@ -72,6 +87,10 @@ a:visited {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.flex-row {
+  flex-direction: row;
 }
 
 .space-between {
@@ -220,7 +239,8 @@ a:visited {
 
 .sidebar-button p,
 .content-button a {
-  padding-left: 10px;
+  padding-left: 15px;
+  margin: 0px;
 }
 
 .sidebar-button:hover:not(.selected) {
