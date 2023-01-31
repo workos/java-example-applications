@@ -53,7 +53,7 @@ public class AuditLogsApp {
       String before = ctx.queryParam("before");
       List<String> domains = List.of("foo-corp.com");
       ListOrganizationsOptions options =
-        ListOrganizationsOptions.builder().limit(5).build();
+        ListOrganizationsOptions.builder().limit(5).order(Order.Desc).build();
 
       if (after != null) {
         options.put("after", after);
@@ -63,7 +63,6 @@ public class AuditLogsApp {
         options.put("before", before);
       }
 
-      options.put("order", "desc");
       OrganizationList organizationList = workos.organizations.listOrganizations(options);
       Map<String, Object> jteParams = new HashMap<>();
       jteParams.put("organizations", organizationList);
