@@ -55,7 +55,7 @@ The .env file is listed in this repo's .gitignore file, so your sensitive inform
 $ ./gradlew :java-directory-sync-example:run
 ```
 
-8. Navigate to http://localhost:7001. Click the “View Directories” button. You will then see a list of Directories if any have been added to your WorkOS dashboard. If you don’t see any Directories, it’s time to [add your first one](https://workos.com/docs/directory-sync/guide)!
+8. Navigate to http://localhost:7001. Select an Organization to view its directories. If you don’t see any Directories, it’s time to [add your first one](https://workos.com/docs/directory-sync/guide)!
 
 Nice work! You just set up Directory Sync for your Java app!
 

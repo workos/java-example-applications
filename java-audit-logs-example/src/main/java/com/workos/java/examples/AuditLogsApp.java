@@ -54,7 +54,9 @@ public class AuditLogsApp {
       String before = ctx.queryParam("before");
       List<String> domains = List.of("foo-corp.com");
       ListOrganizationsOptions options =
-        ListOrganizationsOptions.builder().limit(5).order(Order.Desc).build();
+        ListOrganizationsOptions.builder()
+          .limit(5)
+          .build();
 
       if (after != null) {
         options.put("after", after);
