@@ -1,12 +1,13 @@
 package com.workos.java.examples;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workos.WorkOS;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoriesOptions;
-import com.workos.directorysync.DirectorySyncApi.ListDirectoriesOptions.ListDirectoriesOptionsBuilder;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoryGroupOptions;
 import com.workos.directorysync.DirectorySyncApi.ListDirectoryUserOptions;
+import com.workos.organizations.OrganizationsApi.ListOrganizationsOptions;
+import com.workos.sso.SsoApi.ListConnectionsOptions;
+import com.workos.organizations.models.OrganizationList;
 import com.workos.directorysync.models.DirectoryGroupList;
 import com.workos.directorysync.models.DirectoryList;
 import com.workos.directorysync.models.DirectoryUserList;
@@ -18,6 +19,8 @@ import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+
 
 public class DirectorySyncApp {
   private final WorkOS workos;
@@ -34,7 +37,7 @@ public class DirectorySyncApp {
 
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
-    app.get("/", ctx -> ctx.render("home.jte"));
+    app.get("/", this::listOrganizations);
     app.get("/directories", this::directories);
     app.get("/directories/delete/{directoryId}", this::deleteDirectory);
     app.get("/directories/{directoryId}/users", this::directoryUsers);
@@ -44,7 +47,13 @@ public class DirectorySyncApp {
   }
 
   public void directories(Context ctx) {
-    String organization = ""; // enter the organization id here to filter for a specific organization's directory
+    String organization = ctx.queryParam("id");
+    if (ctx.queryParam("id") != null){
+      ctx.sessionAttribute("currentOrganization", organization);
+    } else {
+      organization = ctx.sessionAttribute("currentOrganization");
+    }
+
     String after = ctx.queryParam("after");
     String before = ctx.queryParam("before");
     String deleteResult = ctx.queryParam("deleteResult");
@@ -74,6 +83,31 @@ public class DirectorySyncApp {
     ctx.render("directories.jte", jteParams);
   }
 
+  public void listOrganizations(Context ctx) {
+    String after = ctx.queryParam("after");
+    String before = ctx.queryParam("before");
+
+    List<String> domains = List.of("foo-corp.com");
+
+    ListOrganizationsOptions options =
+      ListOrganizationsOptions.builder().limit(5).build();
+
+    if (after != null) {
+      options.put("after", after);
+    }
+
+    if (before != null) {
+      options.put("before", before);
+    }
+
+    OrganizationList organizationList = workos.organizations.listOrganizations(options);
+
+    Map<String, Object> jteParams = new HashMap<>();
+    jteParams.put("organizations", organizationList);
+
+    ctx.render("home.jte", jteParams);
+    }
+
   public void deleteDirectory(Context ctx) {
     String directoryId = ctx.pathParam("directoryId");
     String deleteResult;
@@ -85,7 +119,7 @@ public class DirectorySyncApp {
       deleteResult = "failed";
     }
 
-    ctx.redirect("/directories?deleteResult=" + deleteResult);
+    ctx.redirect("/directories?deleteResult=" + deleteResult + "&&id=" + ctx.sessionAttribute("currentOrganization"));
   }
 
   public void directoryUsers(Context ctx) {
@@ -188,3 +222,5 @@ public class DirectorySyncApp {
     new DirectorySyncApp();
   }
 }
+
+

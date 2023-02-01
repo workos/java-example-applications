@@ -30,32 +30,33 @@ public class AdminPortalApp {
     workos = new WorkOS(env.get("WORKOS_API_KEY"));
 
     app.get("/", ctx -> ctx.render("home.jte"));
-    app.get("/admin-portal/sso", this::ssoPortal);
-    app.get("/admin-portal/dsync", this::dsyncPortal);
+    app.get("/admin-portal/generateLink", this::generateLink);
     app.post("/provision-enterprise", this::provisionEnterprise);
   }
 
-  public void ssoPortal(Context ctx) {
+  public void generateLink(Context ctx) {
     String organizationId = ctx.cookie("organizationId");
+    Intent intent = null;
+    switch(ctx.queryParam("intent")) {
+      case "sso":
+        intent = Intent.Sso;
+        break;
+      case "audit_logs":
+        intent = Intent.AuditLogs;
+        break;
+      case "dsync":
+        intent = Intent.DirectorySync;
+        break;
+      case "log_streams":
+        intent = Intent.LogStreams;
+        break;
+    }
 
     Link url =
         workos.portal.generateLink(
             GeneratePortalLinkOptions.builder()
                 .organization(organizationId)
-                .intent(Intent.Sso)
-                .build());
-
-    ctx.redirect(url.link);
-  }
-
-  public void dsyncPortal(Context ctx) {
-    String organizationId = ctx.cookie("organizationId");
-
-    Link url =
-        workos.portal.generateLink(
-            GeneratePortalLinkOptions.builder()
-                .organization(organizationId)
-                .intent(Intent.DirectorySync)
+                .intent(intent)
                 .build());
 
     ctx.redirect(url.link);

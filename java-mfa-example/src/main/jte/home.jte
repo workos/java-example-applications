@@ -60,13 +60,13 @@
             <div class="flex_column">
               @for(var factor : factorIdList)
                 <a href="/factor_detail?id=${factor}">
-                  <button class="button">${factor}</button>
+                  <button class="width-40vw button">${factor}</button>
                 </a>
               @endfor
             </divclass>
 
             @else
-              <div class="mt-20 card width_40vw">
+              <div class="mt-20 card width-40vw">
                 <p style="text-align: center; color: gray;">No Current Factors</p>
               </div>
           @endif

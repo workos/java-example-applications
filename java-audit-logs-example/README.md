@@ -53,23 +53,15 @@ The .env file is listed in this repo's .gitignore file, so your sensitive inform
 $ ./gradlew :java-audit-logs-example:run
 ```
 
-8. Navigate to http://localhost:7001. Enter the directory ID of the organization for which you wish to capture audit logs. 
+8. Navigate to http://localhost:7001. Select an Organization.
 
 ## Audit Logs Setup with WorkOS
 
 9. Follow the [Audit Logs configuration steps](https://workos.com/docs/audit-logs/emit-an-audit-log-event/sign-in-to-your-workos-dashboard-account-and-configure-audit-log-event-schemas) to set up the following 5 events that are sent with this example:
 
-Action title: "user.signed_in" | Target type: "team"
-Action title: "user.logged_out" | Target type: "team"
 Action title: "user.organization_set" | Target type: "team"
 Action title: "user.organization_deleted" | Target type: "team"
-Action title: "user.connection_deleted" | Target type: "team"
 
-10. Next, take note of the Organization ID for the Org which you will be sending the Audit Log events for. This ID gets entered into the splash page of the example application.
-
-11. Once you enter the Organization ID and submit it, you will be brought to the page where you'll be able to send the audit log events that were just configured. You'll also notice that the action of setting the Organization triggered an Audit Log already. Click the buttons to send the respective events.
-
-12. To obtain a CSV of the Audit Log events that were sent for the last 30 days, click the "Export Events" button. This will bring you to a new page where you can download the events. Downloading the events is a 2 step process. First you need to create the report by clicking the "Generate CSV" button. Then click the "Access CSV" button to download a CSV of the Audit Log events for the selected Organization for the past 30 days.
 
 
 ## Need help?

@@ -8,6 +8,9 @@ Example applications demonstrating to use the [WorkOS Kotlin/Java SDK](https://g
 - [Directory Sync](https://workos.com/docs/directory-sync/guide)
 - [Admin Portal](https://workos.com/docs/admin-portal/guide)
 - [Magic Link](https://workos.com/docs/magic-link/guide)
+- [MFA](https://workos.com/docs/mfa/guide)
+- [Audit Logs](https://workos.com/docs/audit-logs)
+- [Webhooks](https://workos.com/docs/webhooks)
 
 - [API Reference](https://workos.com/docs/reference)
 
