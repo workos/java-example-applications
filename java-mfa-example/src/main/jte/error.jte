@@ -19,10 +19,7 @@
 </div>
 <div class='flex mt-50'>
     <div>
-        <img src="/images/blurpy.png" alt="helfplul blurpy">
-    </div>
-    <div>
-        <p>It's an error.</p>
+        <p>WorkOS Error</p>
         <p>${error}</p>
 
     </div>
