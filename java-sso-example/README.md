@@ -51,11 +51,11 @@ The .env file is listed in this repo's .gitignore file, so your sensitive inform
     
 ## Set up SSO with WorkOS
 7. Create an [Organization](https://dashboard.workos.com/organizations) and an [SSO Connection](https://workos.com/docs/sso/guide/introduction) in the Organization in your WorkOS Dashboard.
-8. Copy the Connection ID from the new connection that you just set up and add it to the same .env file that you created in step 6. The .env file should now look like this: 
+8. Copy the Organization ID from the organization that you just set up and add it to the same .env file that you created in step 6. The .env file should now look like this: 
 ```bash
 WORKOS_API_KEY=your_api_key_here
 WORKOS_CLIENT_ID=your_project_id_here
-WORKOS_CONNECTION_ID=your_connection_id_here
+WORKOS_ORGANIZATION_ID=your_organization_id_here
 ```
 
 10. Add http://localhost:7001/callback as the default Redirect URI in the Configuration section of the WorkOS Dashboard:
