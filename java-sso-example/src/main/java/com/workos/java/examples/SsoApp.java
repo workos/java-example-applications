@@ -25,22 +25,33 @@ public class SsoApp {
     clientId = env.get("WORKOS_CLIENT_ID");
 
     app.get("/", this::isLoggedIn);
-    app.get("/login", this::login);
+    app.post("/login", this::login);
     app.get("/callback", this::callback);
     app.get("logout", this::logout);
   }
 
   public void login(Context ctx) {
     Dotenv env = Dotenv.configure().directory("../.env").load();
-    String connectionId = env.get("WORKOS_CONNECTION_ID");
-    String url =
-        workos
-            .sso
-            .getAuthorizationUrl(clientId, "http://localhost:7001/callback")
-            .connection(connectionId)
-            .build();
+    String organizationId = env.get("WORKOS_ORGANIZATION_ID");
+    String loginType = ctx.formParam("login_method");
 
-    ctx.redirect(url);
+    if (loginType.equals("saml")) {
+      String url =
+        workos
+          .sso
+          .getAuthorizationUrl(clientId, "http://localhost:7001/callback")
+          .organization(organizationId)
+          .build();
+      ctx.redirect(url);
+    } else {
+      String url =
+        workos
+          .sso
+          .getAuthorizationUrl(clientId, "http://localhost:7001/callback")
+          .provider(loginType)
+          .build();
+      ctx.redirect(url);
+    }
   }
 
   public void callback(Context ctx) {
