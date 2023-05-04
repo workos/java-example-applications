@@ -36,6 +36,7 @@ public class MfaApp {
     app.get("/clear_session", this::clear_session);
     app.get("/factor_detail", this::factor_detail);
     app.post("/enroll_factor", this::enroll_factor);
+    app.post("/enroll_totp_factor", this::enroll_totp_factor);
     app.get("/enroll_factor_details", this::enroll_factor_details);
     app.post("/challenge_factor", this::challenge_factor);
     app.post("/verify_factor", this::verify_factor);
@@ -166,6 +167,10 @@ public class MfaApp {
 
   public void enroll_factor_details(Context ctx ) {
     ctx.render("enroll_factor.jte");
+  }
+
+  public void enroll_totp_factor(Context ctx ) {
+    ctx.status(200).json("hello");
   }
 
   public void enroll_factor(Context ctx) {
