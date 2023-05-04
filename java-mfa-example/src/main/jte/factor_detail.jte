@@ -56,12 +56,6 @@
                             @endif
                             <p>Created At: <code>${createdAt}</code></p>
                         </div>
-
-                        @if(type.equals("totp"))
-                            <div class="qr_div">
-                                <img class="qr_code" src="${qrCode}" alt="qr_code">
-                            </div>
-                        @endif
                     </div>
                 </div>
 
