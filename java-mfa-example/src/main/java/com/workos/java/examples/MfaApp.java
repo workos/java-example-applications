@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.databind.JsonNode;
 
 
 public class MfaApp {
@@ -170,34 +171,58 @@ public class MfaApp {
   }
 
   public void enroll_totp_factor(Context ctx ) {
-    ctx.status(200).json("hello");
+    JsonNode jsonNode = ctx.bodyAsClass(JsonNode.class);
+    String issuer = jsonNode.get("issuer").asText();
+    String user = jsonNode.get("user").asText();
+    EnrollFactorOptions options;
+
+    options = EnrollFactorOptions.builder()
+      .type("totp")
+      .issuer(issuer)
+      .user(user)
+      .build();
+
+    try {
+      Factor factor = workos.mfa.enrollFactor(options);
+      String factorId = factor.id;
+
+      if(ctx.sessionAttribute("factorList") != null) {
+        ArrayList<String> factorIdList = ctx.sessionAttribute("factorIdList");
+        factorIdList.add(factorId);
+        ctx.sessionAttribute("factorIdList", factorIdList);
+        HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
+        factorList.put(factorId, factor);
+        ctx.sessionAttribute("factorList", factorList);
+      } else {
+        ArrayList<String> factorIdList = new ArrayList<>();
+        factorIdList.add(factorId);
+        ctx.sessionAttribute("factorIdList", factorIdList);
+        HashMap<String, Factor> factorList = new HashMap<>();
+        factorList.put(factorId, factor);
+        ctx.sessionAttribute("factorList", factorList);
+      }
+      HashMap<String, Factor> factorList = ctx.sessionAttribute("factorList");
+      ArrayList<Object> list = new ArrayList<Object>(factorList.values());
+      ctx.sessionAttribute("arrayFactorList", list);
+      ctx.status(200).json(factor);
+    } catch (Exception e) {
+      if(e.equals(null)) {
+        ctx.render("error.jte");
+      }
+      Map<String, Object> jteParams = new HashMap<>();
+      jteParams.put("error", e.getMessage());
+      ctx.render("error.jte", jteParams);
+    }
   }
 
   public void enroll_factor(Context ctx) {
     String phoneNumber = ctx.formParam("phone_number");
-    String factorType = ctx.formParam("type");
-    String issuer = ctx.formParam("totp_issuer");
-    String user = ctx.formParam("totp_user");
     EnrollFactorOptions options;
 
-    switch(factorType) {
-      case "sms":
-        options = EnrollFactorOptions.builder()
-          .type("sms")
-          .phoneNumber(phoneNumber)
-          .build();
-          break;
-      case "totp":
-        options = EnrollFactorOptions.builder()
-          .type("totp")
-          .issuer(issuer)
-          .user(user)
-          .build();
-          break;
-      default:
-        options = EnrollFactorOptions.builder()
-          .build();
-    }
+    options = EnrollFactorOptions.builder()
+      .type("sms")
+      .phoneNumber(phoneNumber)
+      .build();
 
     try {
       Factor factor = workos.mfa.enrollFactor(options);
