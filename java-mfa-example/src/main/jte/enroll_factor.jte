@@ -101,63 +101,63 @@
 </div>
 </body>
 
-    <script>
-        const phoneNumber = document.getElementById("phone_number")
-        const totpIssuer = document.getElementById("totp_issuer")
-        const totpUser = document.getElementById("totp_user")
-        const smsSubmitButton = document.getElementById("sms-factor-submit-btn")
-        const totpSubmitButton = document.getElementById("totp-factor-submit-btn")
-        const closeModalBtn = document.getElementById("close-modal-btn")
-        const overlay = document.getElementById("overlay")
-        const modal = document.getElementById("modal")
+<script>
+    const phoneNumber = document.getElementById("phone_number")
+    const totpIssuer = document.getElementById("totp_issuer")
+    const totpUser = document.getElementById("totp_user")
+    const smsSubmitButton = document.getElementById("sms-factor-submit-btn")
+    const totpSubmitButton = document.getElementById("totp-factor-submit-btn")
+    const closeModalBtn = document.getElementById("close-modal-btn")
+    const overlay = document.getElementById("overlay")
+    const modal = document.getElementById("modal")
 
-        phoneNumber.addEventListener("input", validateSmsForm)
-        totpIssuer.addEventListener("input", validateTotpForm)
-        totpUser.addEventListener("input", validateTotpForm)
+    phoneNumber.addEventListener("input", validateSmsForm)
+    totpIssuer.addEventListener("input", validateTotpForm)
+    totpUser.addEventListener("input", validateTotpForm)
 
-        function validateSmsForm() {
-            if (phoneNumber.value.trim() !== "") {
-                smsSubmitButton.disabled = false
-            } else {
-                smsSubmitButton.disabled = true
-            }
+    function validateSmsForm() {
+        if (phoneNumber.value.trim() !== "") {
+            smsSubmitButton.disabled = false
+        } else {
+            smsSubmitButton.disabled = true
         }
+    }
 
-        function validateTotpForm() {
-            if (totpIssuer.value.trim() !== "" && totpUser.value.trim() !== "") {
-                totpSubmitButton.disabled = false
-            } else {
-                totpSubmitButton.disabled = true
-            }
+    function validateTotpForm() {
+        if (totpIssuer.value.trim() !== "" && totpUser.value.trim() !== "") {
+            totpSubmitButton.disabled = false
+        } else {
+            totpSubmitButton.disabled = true
         }
+    }
 
-        totpSubmitButton.addEventListener("click", function() {
-            fetch('/enroll_totp_factor', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    type: 'totp',
-                    issuer: totpIssuer.value,
-                    user: totpUser.value,
-                })
+    totpSubmitButton.addEventListener("click", function() {
+        fetch('/enroll_totp_factor', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                type: 'totp',
+                issuer: totpIssuer.value,
+                user: totpUser.value,
             })
-                .then(response => response.text())
-                .then(response => {
-                    console.log(response)
-                    overlay.style.display = "block"
-                    modal.innerHTML = `
-                        <h2>Scan the QR code</h2>
-                        <p class="qr_code_instructions">Use the authenticator app to scan the QR code. After you scan the code, click 'Continue'.</p>
-                        <img class="qr_code" src="qr code will go here" alt="qr_code">
-                        <a href="/" class="button button-outline">Continue</a>
-                    `
-                })
+        })
+            .then(response => response.json())
+            .then(response => {
+                overlay.style.display = "block"
+                modal.innerHTML = `
+                    <h2>Scan the QR code</h2>
+                    <p class="qr_code_instructions">Use the authenticator app to scan the QR code. After you scan the code, click 'Continue'.</p>
+                    <img class="qr_code" id="qr_code" src="" alt="qr_code">
+                    <a href="/" class="button button-outline">Continue</a>
+                `
+                const qrCode = document.getElementById("qr_code");
+                qrCode.src = response.totp.qr_code
+            })
         })
 
-        closeModalBtn.addEventListener("click", function() {
-            overlay.style.display = "none"
-        })
-    </script>
-
+    closeModalBtn.addEventListener("click", function() {
+        overlay.style.display = "none"
+    })
+</script>
