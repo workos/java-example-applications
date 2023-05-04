@@ -42,21 +42,16 @@
             <div class="flex space_between ">
                 <div class="factor_card">
                     <h2>Enroll SMS Factor</h2>
-                    <form action="/enroll_factor" method="post">
+                    <form action="/enroll_sms_factor" method="post">
                         <div class="flex flex_column">
                             <div class="flex">
                                 <input class="text_input" type="text" id="phone_number" name="phone_number"
                                        placeholder="Phone Number">
                             </div>
-
                             <div>
-                                <button type="submit"
-                                        name="type"
-                                        value="sms"
-                                        class="button button-outline button-sm"
-                                        id="sms-factor-submit-btn"
-                                        disabled
-                                        >Enroll New Factor
+                                <button type="submit" name="type" value="sms"
+                                        class="button button-outline button-sm" id="sms-factor-submit-btn"
+                                        disabled>Enroll New Factor
                                 </button>
                             </div>
                         </div>
@@ -77,13 +72,9 @@
                             </div>
 
                             <div>
-                                <button type="submit"
-                                        name="type"
-                                        value="totp"
-                                        class="button button-outline button-sm"
-                                        id="totp-factor-submit-btn"
-                                        disabled
-                                        >Enroll New Factor
+                                <button type="submit" name="type" value="totp"
+                                        class="button button-outline button-sm" id="totp-factor-submit-btn"
+                                        disabled>Enroll New Factor
                                 </button>
                             </div>
                         </div>
@@ -91,7 +82,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 <div class="overlay" id="overlay" style="display: none;">
@@ -138,7 +128,6 @@
                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                type: 'totp',
                 issuer: totpIssuer.value,
                 user: totpUser.value,
             })

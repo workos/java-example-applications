@@ -36,7 +36,7 @@ public class MfaApp {
     app.get("/", this::home);
     app.get("/clear_session", this::clear_session);
     app.get("/factor_detail", this::factor_detail);
-    app.post("/enroll_factor", this::enroll_factor);
+    app.post("/enroll_sms_factor", this::enroll_sms_factor);
     app.post("/enroll_totp_factor", this::enroll_totp_factor);
     app.get("/enroll_factor_details", this::enroll_factor_details);
     app.post("/challenge_factor", this::challenge_factor);
@@ -215,7 +215,7 @@ public class MfaApp {
     }
   }
 
-  public void enroll_factor(Context ctx) {
+  public void enroll_sms_factor(Context ctx) {
     String phoneNumber = ctx.formParam("phone_number");
     EnrollFactorOptions options;
 
