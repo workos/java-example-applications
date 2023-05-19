@@ -52,9 +52,14 @@ public class MagicLinkApp {
       PasswordlessSession session = workos.passwordless.createSession(options);
 
       // optionally you can send the e-mail yourself using the url from `session.link`
-
       workos.passwordless.sendSession(session.id);
-      ctx.render("sent.jte", Collections.singletonMap("email", email));
+
+      String link = session.link;
+      Map<String, Object> jteParams = new HashMap<>();
+      jteParams.put("link", link);
+      jteParams.put("email", email);
+
+      ctx.render("sent.jte", jteParams);
     } catch (Exception e) {
       e.printStackTrace();
       String errorMessage = e.getMessage();

@@ -31,7 +31,7 @@
         <div class="flex_column">
             <div class="flex-column">
                 <div>
-                    <form method="POST" action="/verify_factor">Ò
+                    <form method="POST" action="/verify_factor">
                         <div class='flex_column'>
                             <div class="flex form-wrap">
                                 <input type="text" id="code-1" name="code-1" maxlength="1"
