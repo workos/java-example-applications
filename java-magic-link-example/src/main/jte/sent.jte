@@ -16,7 +16,7 @@
             />
         </div>
     </div>
-    <div>
+    <div class="flex">
         <a href="https://workos.com/docs" target="_blank"
         >
             <button class="button nav-item">Documentation</button>

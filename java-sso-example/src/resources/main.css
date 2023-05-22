@@ -381,3 +381,35 @@ h1 {
 #noborder > :first-child {
   display: none;
 }
+
+tr {
+  text-align: left;
+  border-bottom: 1px solid #ebebf2;
+}
+
+tr:hover {
+  background-color: #ebebf2;
+}
+
+table,
+td {
+  padding: 5px 20px;
+}
+
+table {
+  border-collapse: collapse;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 25px 0px;
+  width: 70vw;
+}
+
+th {
+  text-align: center;
+  font-weight: bolder;
+  font-size: large;
+  background-color: #e3e3e3;
+  border-right: none;
+  border-left: none;
+  padding: 15px 40px;
+}

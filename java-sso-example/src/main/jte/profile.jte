@@ -22,7 +22,7 @@
 <div class='flex'>
   <div class="logged_in_div_right">
     <div class="flex_column">
-      <table class="table">
+      <table>
         <tr>
           <th>SSO Profile</th>
         </tr>
