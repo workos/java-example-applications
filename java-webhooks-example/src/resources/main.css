@@ -196,10 +196,6 @@ div.text_box {
     padding: 10px;
     word-wrap: break-word;
     overflow: scroll;
-    border-width: 3px;
-    border-style: solid;
-    border-image:
-        linear-gradient(#a163f1, #6363f1 22%, #3498ea 40%, #40dfa3 67%, rgba(64, 223, 163, 0)) 0 100%;
 }
 
 .logged_in_nav {
@@ -254,4 +250,8 @@ pre.prettyprint {
     height: 35px;
     width: 18vw;
     text-align: center;
+}
+
+.lh-none {
+    line-height: var(--bs-body-line-height)
 }
