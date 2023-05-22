@@ -27,8 +27,8 @@
   <div class="logged_in_div_right">
     <div class="flex_column directory_container">
       <div class="container" style="padding: 40px;">
-        <h3>Directory Users for <code>${directoryId}</code></h3>
-        <table class="table">
+        <h3>Directory: <code>${directoryId}</code></h3>
+        <table >
           <tr>
             <th>Directory User ID</th>
             <th>First Name</th>

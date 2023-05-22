@@ -37,7 +37,7 @@
           @if(hasError)
             <div class="alert alert-danger" >Error occurred fetching group</div>
           @endif
-          <pre class="overflow prettyprint">
+          <pre id="noborder" class="overflow prettyprint">
           ${directoryGroup}
         </pre>
         </div>

@@ -33,7 +33,7 @@
 <div class='flex_column  height-70vh'>
   <div class="flex width-70vw space-between">
     <div>
-      <h2>Select a Directory</h2>
+      <h2>Select an Organization</h2>
     </div>
   </div>
 

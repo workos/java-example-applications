@@ -36,7 +36,7 @@
         @if(hasError == true)
           <div class="alert alert-danger" >Error occurred fetching user</div>
         @endif
-        <pre class="overflow prettyprint">
+        <pre id="noborder" class="overflow prettyprint">
           ${directoryUser}
         </pre>
       </div>
