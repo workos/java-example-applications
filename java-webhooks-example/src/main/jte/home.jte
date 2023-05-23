@@ -18,30 +18,19 @@
   </div>
 </div>
 <div class='flex'>
-  <div class="logged_in_div_left">
-    <div class="title-text">
-      <h1>Your app,</h1>
-      <h2 class="home-hero-gradient">Enterprise Ready</h2>
-    </div>
-    <div class="title-subtext">
-      <p>Start selling to enterprise customers with just a few lines of code.</p>
-      <p>Implement features like single sign-on in minutes instead of months.</p>
-    </div>
-    <div class="flex success-buttons">
-      <a href="https://workos.com/signup" target="_blank"><button class='button'>Get Started</button></a>
-      <a href="mailto:sales@workos.com?subject=WorkOS Sales Inquiry" target="_blank"><button
-                class='button button-outline sales-button'>Contact
-          Sales</button></a>
-    </div>
-  </div>
   <div class="logged_in_div_right">
     <div class="flex_column directory_container">
       <div class="flex flex_column">
-        <h1>Java Webhooks Example</h1>
-
+        <div class="flex width-40vw space-between">
+          <h2 class="lh-none">Live Webhooks View</h2>
+          <div id="tutorial_button">
+            <a href="https://workos.com/blog/test-workos-webhooks-locally-ngrok" target="_blank"
+               class="button mt-15">Tutorial</a>
+            <a href="/webhooks" class="button mt-10">Clear</a>
+          </div>
+        </div>
         <div id="webhooks-view"></div>
       </div>
-      <a href="/" class="button login_button">Clear</a>
     </div>
   </div>
 </div>

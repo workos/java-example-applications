@@ -6,26 +6,18 @@
 <link rel="stylesheet" href="../../../main.css">
 
 <div class="logged_in_nav">
-  <div class="flex space-between width-100vw">
-    <div><p>Java Directory Sync Example App</p></div>
-    <div class="flex">
-      <div>
-        <a href="https://workos.com/docs" target="_blank"><button class='button nav-item'>Documentation</button></a>
-      </div>
-      <div>
-        <a href="https://workos.com/docs/reference" target="_blank"><button class='button nav-item'>API
-            Reference</button></a>
-      </div>
-      <div>
-        <a href="https://workos.com/blog" target="_blank"><button
-                  class='button nav-item blog-nav-button'>Blog</button></a>
-      </div>
-      <div>
-        <a href="https://workos.com/" target="_blank">
-          <img class="nav-image" src="/images/workos_favicon.png" alt="link to workos.com">
-        </a>
-      </div>
+  <div class="flex">
+    <div>
+      <img class="nav-image" src="/images/workos-logo-with-text.png" alt="workos logo">
     </div>
+  </div>
+  <div>
+    <a href="https://workos.com/docs" target="_blank"><button class='button nav-item'>Documentation</button></a>
+    <a href="https://workos.com/docs/reference" target="_blank"><button class='button nav-item'>API
+        Reference</button></a>
+    <a href="https://workos.com/blog" target="_blank"><button
+              class='button nav-item blog-nav-button'>Blog</button></a>
+    <a href="https://workos.com/" target="_blank"><button class='button button-outline'>WorkOS</button></a>
   </div>
 </div>
 <div class='flex'>
@@ -36,7 +28,7 @@
         @if(hasError == true)
           <div class="alert alert-danger" >Error occurred fetching user</div>
         @endif
-        <pre class="overflow prettyprint">
+        <pre id="noborder" class="overflow prettyprint">
           ${directoryUser}
         </pre>
       </div>

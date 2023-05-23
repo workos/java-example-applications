@@ -26,7 +26,7 @@
 
   <div class="logged_in_div_right">
     <div class="flex_column directory_container">
-      <table class="table overflow">
+      <table class="overflow">
         <tr>
           <th>Directory Group ID</th>
           <th>Directory Id</th>

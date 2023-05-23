@@ -233,16 +233,6 @@ div.text_box {
   padding: 10px;
   word-wrap: break-word;
   overflow: scroll;
-  border-width: 3px;
-  border-style: solid;
-  border-image: linear-gradient(
-      #a163f1,
-      #6363f1 22%,
-      #3498ea 40%,
-      #40dfa3 67%,
-      rgba(64, 223, 163, 0)
-    )
-    0 100%;
 }
 
 .logged_in_nav {
@@ -385,4 +375,12 @@ th {
   border-right: none;
   border-left: none;
   padding: 15px 40px;
+}
+
+#noborder {
+  border: none;
+}
+
+#noborder > :first-child {
+  display: none;
 }

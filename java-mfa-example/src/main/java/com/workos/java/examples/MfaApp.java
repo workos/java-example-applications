@@ -1,4 +1,5 @@
 package com.workos.java.examples;
+
 import com.workos.WorkOS;
 import com.workos.mfa.MfaApi;
 import com.workos.mfa.MfaApi.EnrollFactorOptions;
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 
 public class MfaApp {
+
   private final WorkOS workos;
   private final String clientId;
 
@@ -45,10 +47,13 @@ public class MfaApp {
 
 
   public void home(Context ctx) {
-    if(ctx.sessionAttribute("arrayFactorList") != null) {
+    if (ctx.sessionAttribute("arrayFactorList") != null) {
       ArrayList<String> factorIdList = ctx.sessionAttribute("factorIdList");
-      ArrayList<Object> factorList = ctx.sessionAttribute("arrayFactorList");
-      ctx.render("home.jte", Collections.singletonMap("factorIdList", factorIdList));
+      ArrayList<Factor> factorList = ctx.sessionAttribute("arrayFactorList");
+      Map<String, Object> jteParams = new HashMap<>();
+      jteParams.put("factorList", factorList);
+      System.out.println(jteParams);
+      ctx.render("home.jte", jteParams);
     } else {
       ctx.render("home.jte");
     }
@@ -86,7 +91,7 @@ public class MfaApp {
 
       ctx.render("challenge_result.jte", jteParams);
     } catch (Exception e) {
-      if(e.equals(null)) {
+      if (e.equals(null)) {
         ctx.render("error.jte");
       }
       Map<String, Object> jteParams = new HashMap<>();
@@ -101,7 +106,7 @@ public class MfaApp {
     String smsCode = ctx.formParam("sms_message");
     String currentFactorId = ctx.sessionAttribute("currentFactorId");
 
-    if(factorType.equals("sms")) {
+    if (factorType.equals("sms")) {
       ChallengeFactorOptions options = MfaApi.ChallengeFactorOptions.builder()
         .authenticationFactorId(currentFactorId)
         .smsTemplate(smsCode)
@@ -109,10 +114,10 @@ public class MfaApp {
       Challenge challenge = workos.mfa.challengeFactor(options);
       ctx.sessionAttribute("currentChallengeId", challenge.id);
 
-      ctx.render ("challenge_factor.jte");
+      ctx.render("challenge_factor.jte");
     }
 
-    if(factorType.equals("totp")) {
+    if (factorType.equals("totp")) {
       ChallengeFactorOptions options = MfaApi.ChallengeFactorOptions.builder()
         .authenticationFactorId(currentFactorId)
         .build();
@@ -120,14 +125,14 @@ public class MfaApp {
         Challenge challenge = workos.mfa.challengeFactor(options);
         ctx.sessionAttribute("currentChallengeId", challenge.id);
       } catch (Exception e) {
-        if(e.equals(null)) {
+        if (e.equals(null)) {
           ctx.render("error.jte");
         }
         Map<String, Object> jteParams = new HashMap<>();
         jteParams.put("error", e.getMessage());
         ctx.render("error.jte", jteParams);
       }
-      ctx.render ("challenge_factor.jte");
+      ctx.render("challenge_factor.jte");
     }
   }
 
@@ -142,35 +147,35 @@ public class MfaApp {
     jteParams.put("createdAt", currentFactor.createdAt);
     jteParams.put("type", currentFactor.type);
 
-    switch(currentFactor.type) {
+    switch (currentFactor.type) {
       case "sms":
         jteParams.put("phoneNumber", currentFactor.sms.phoneNumber);
         jteParams.put("factorId", currentFactor.id);
         jteParams.put("createdAt", currentFactor.createdAt);
         jteParams.put("type", currentFactor.type);
         break;
-     case "totp":
+      case "totp":
         jteParams.put("factorId", currentFactor.id);
         jteParams.put("createdAt", currentFactor.createdAt);
         jteParams.put("type", currentFactor.type);
         jteParams.put("qrCode", currentFactor.totp.qrCode);
         break;
-    default:
-      String error = "Invalid type";
-      String errorMessage = "Type must be either 'sms' or 'totp'";
-      jteParams.put("error", error);
-      jteParams.put("errorMessage", errorMessage);
-      ctx.render("error.jte", jteParams);
+      default:
+        String error = "Invalid type";
+        String errorMessage = "Type must be either 'sms' or 'totp'";
+        jteParams.put("error", error);
+        jteParams.put("errorMessage", errorMessage);
+        ctx.render("error.jte", jteParams);
     }
 
     ctx.render("factor_detail.jte", jteParams);
   }
 
-  public void enroll_factor_details(Context ctx ) {
+  public void enroll_factor_details(Context ctx) {
     ctx.render("enroll_factor.jte");
   }
 
-  public void enroll_totp_factor(Context ctx ) {
+  public void enroll_totp_factor(Context ctx) {
     JsonNode jsonNode = ctx.bodyAsClass(JsonNode.class);
     String issuer = jsonNode.get("issuer").asText();
     String user = jsonNode.get("user").asText();
@@ -186,7 +191,7 @@ public class MfaApp {
       Factor factor = workos.mfa.enrollFactor(options);
       String factorId = factor.id;
 
-      if(ctx.sessionAttribute("factorList") != null) {
+      if (ctx.sessionAttribute("factorList") != null) {
         ArrayList<String> factorIdList = ctx.sessionAttribute("factorIdList");
         factorIdList.add(factorId);
         ctx.sessionAttribute("factorIdList", factorIdList);
@@ -206,7 +211,7 @@ public class MfaApp {
       ctx.sessionAttribute("arrayFactorList", list);
       ctx.status(200).json(factor);
     } catch (Exception e) {
-      if(e.equals(null)) {
+      if (e.equals(null)) {
         ctx.render("error.jte");
       }
       Map<String, Object> jteParams = new HashMap<>();
@@ -228,7 +233,7 @@ public class MfaApp {
       Factor factor = workos.mfa.enrollFactor(options);
       String factorId = factor.id;
 
-      if(ctx.sessionAttribute("factorList") != null) {
+      if (ctx.sessionAttribute("factorList") != null) {
         ArrayList<String> factorIdList = ctx.sessionAttribute("factorIdList");
         factorIdList.add(factorId);
         ctx.sessionAttribute("factorIdList", factorIdList);
@@ -248,7 +253,7 @@ public class MfaApp {
       ctx.sessionAttribute("arrayFactorList", list);
       ctx.redirect("/");
     } catch (Exception e) {
-      if(e.equals(null)) {
+      if (e.equals(null)) {
         ctx.render("error.jte");
       }
       Map<String, Object> jteParams = new HashMap<>();
@@ -257,7 +262,7 @@ public class MfaApp {
     }
   }
 
-  public void clear_session(Context ctx ) {
+  public void clear_session(Context ctx) {
     ctx.sessionAttribute("factorList", null);
     ctx.sessionAttribute("arrayFactorList", null);
     ctx.sessionAttribute("factorIdList", null);

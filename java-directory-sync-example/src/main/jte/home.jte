@@ -6,34 +6,25 @@
 <link rel="stylesheet" href="main.css">
 
 <body>
-<div class="logged_in_nav_home">
-  <div class="flex space-between width-100vw">
-    <div><p>Java Directory Sync Example App</p></div>
-    <div class="flex">
-      <div>
-        <a href="https://workos.com/docs" target="_blank"><button class='button nav-item'>Documentation</button></a>
-      </div>
-      <div>
-        <a href="https://workos.com/docs/reference" target="_blank"><button class='button nav-item'>API
-            Reference</button></a>
-      </div>
-      <div>
-        <a href="https://workos.com/blog" target="_blank"><button
-                  class='button nav-item blog-nav-button'>Blog</button></a>
-      </div>
-      <div>
-        <a href="https://workos.com/" target="_blank">
-          <img class="nav-image" src="/images/workos_favicon.png" alt="link to workos.com">
-        </a>
-      </div>
+<div class="logged_in_nav">
+  <div class="flex">
+    <div>
+      <img class="nav-image" src="/images/workos-logo-with-text.png" alt="workos logo">
     </div>
-
+  </div>
+  <div>
+    <a href="https://workos.com/docs" target="_blank"><button class='button nav-item'>Documentation</button></a>
+    <a href="https://workos.com/docs/reference" target="_blank"><button class='button nav-item'>API
+        Reference</button></a>
+    <a href="https://workos.com/blog" target="_blank"><button
+              class='button nav-item blog-nav-button'>Blog</button></a>
+    <a href="https://workos.com/" target="_blank"><button class='button button-outline'>WorkOS</button></a>
   </div>
 </div>
 <div class='flex_column  height-70vh'>
   <div class="flex width-70vw space-between">
     <div>
-      <h2>Select a Directory</h2>
+      <h2>Select an Organization</h2>
     </div>
   </div>
 
