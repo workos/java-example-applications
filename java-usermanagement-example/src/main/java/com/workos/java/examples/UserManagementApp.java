@@ -1,13 +1,16 @@
 package com.workos.java.examples;
 
 import com.workos.WorkOS;
+import com.workos.usermanagement.models.Identity;
 import com.workos.usermanagement.models.User;
 import com.workos.usermanagement.types.UserManagementProviderEnumType;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 
 
 public class UserManagementApp {
@@ -49,15 +52,16 @@ public class UserManagementApp {
     assert code != null;
 
     User user = workos.userManagement.authenticateWithCode(clientId, code, null).getUser();
+    Identity[] identities = workos.userManagement.getUserIdentities(user.getId());
     ctx.sessionAttribute("user", user);
+    ctx.sessionAttribute("identities", Arrays.stream(identities).map(Identity::toString).toList().toString());
 
     ctx.redirect("/");
   }
 
   public void isLoggedIn(Context ctx) {
-
     if (ctx.sessionAttribute("user") != null){
-      ctx.render("user.jte", Collections.singletonMap("user", ctx.sessionAttribute("user")));
+      ctx.render("user.jte", Map.of("user", ctx.sessionAttribute("user"), "identities", ctx.sessionAttribute("identities")));
     } else {
       ctx.render("home.jte");
     }
