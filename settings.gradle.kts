@@ -14,7 +14,7 @@ include(
   "java-magic-link-example",
   "java-mfa-example",
   "java-sso-example",
-  "java-user-management-example",
+  "java-usermanagement-example",
   "java-webhooks-example",
   "java-audit-logs-example",
 )

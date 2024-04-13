@@ -65,7 +65,7 @@ WORKOS_ORGANIZATION_ID=your_organization_id_here
 ## Test the integration
 9. Start the server by running this command in the CLI while you’re in the java-example-applications/ directory:
 ```bash
-$ ./gradlew :java-user-management-example:run
+$ ./gradlew :java-usermanagement-example:run
 ```
 
 10. Navigate to http://localhost:7001. Click the “Login” button. You’ll be prompted to sign in using the identity provider (IdP) you configured during the setup.

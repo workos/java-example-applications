@@ -1,15 +1,13 @@
 package com.workos.java.examples;
 
 import com.workos.WorkOS;
-import com.workos.user_management.models.Identity;
-import com.workos.user_management.models.User;
-import com.workos.user_management.types.UserManagementProviderEnumType;
+import com.workos.usermanagement.models.Identity;
+import com.workos.usermanagement.models.User;
+import com.workos.usermanagement.types.UserManagementProviderEnumType;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.staticfiles.Location;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 
 
