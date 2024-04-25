@@ -1,4 +1,4 @@
-If your SaaS product’s backend is built with Java—or a JVM-compatible language such as Kotlin, Groovy, Scala, or Clojure—and you want to incorporate WorkOS’ Admin Portal functionality, you can do a dry-run of the Admin Portal integration using this example Java app. It makes use of the [WorkOS Kotlin SDK](https://github.com/workos/workos-kotlin).
+If your SaaS product’s backend is built with Java—or a JVM-compatible language such as Kotlin, Groovy, Scala, or Clojure—and you want to incorporate WorkOS’ User Management functionality, you can do a dry-run using this example Java app. It makes use of the [WorkOS Kotlin SDK](https://github.com/workos/workos-kotlin).
 
 If you get stuck while following the steps below and aren't able to resolve the issue by reading our [API reference](https://workos.com/docs/reference) or [User Management Setup Guide](https://workos.com/docs/user-management/guide), please reach out to us at support@workos.com so we can help!
 
